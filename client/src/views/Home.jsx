@@ -35,7 +35,7 @@ function Home() {
         </Grid>
         <Grid component="section" item xs={12} md={4}>
           <Paper elevation={3} sx={{ p: 2, mt: 4, borderRadius: 2 }}>
-            <Typography variant="h2">Användare</Typography>
+            <Typography variant="h2">Varukorg</Typography>
             <UserList />
           </Paper>
           <Paper elevation={3} sx={{ p: 2, mt: 4, borderRadius: 2 }}>

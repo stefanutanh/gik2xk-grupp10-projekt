@@ -43,7 +43,7 @@ function PostItemSmall({ post }) {
         />
         <CardMedia
           component="img"
-          height="300"
+          height="200"
           image={post.imageUrl || placeholderImage}
           alt={`Bild till ${post.title}`}
         />

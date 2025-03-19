@@ -28,7 +28,7 @@ const theme = createTheme({
       paper: grey[50]
     },
     primary: {
-      main: deepPurple[300]
+      main: blueGrey[500]
     },
     secondary: {
       main: blueGrey[500]
