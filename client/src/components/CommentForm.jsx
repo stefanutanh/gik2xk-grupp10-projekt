@@ -29,7 +29,7 @@ function CommentForm({ onSave }) {
           id="body"
         />
       </div>
-      <Button onClick={() => onSave(comment)}>Skicka kommentar</Button>
+      <Button onClick={() => onSave(comment)}>Betygsätt produkt</Button>
     </form>
   );
 }

@@ -15,10 +15,10 @@ function App() {
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h1" component="div" sx={{ flexGrow: 1 }}>
-              <Link to="/">Blogg</Link>
+              <Link to="/">Webbshopshelvete</Link>
             </Typography>
             <Button color="inherit">
-              <Link to="/posts/new">Skapa inlägg</Link>
+              <Link to="/posts/new">Skapa produkt</Link>
             </Button>
           </Toolbar>
         </AppBar>

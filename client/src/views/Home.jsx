@@ -29,7 +29,7 @@ function Home() {
       <Grid container spacing={8}>
         <Grid component="section" item xs={12} md={8}>
           <Paper elevation={3} sx={{ p: 2, mt: 4, borderRadius: 2 }}>
-            <Typography variant="h2">Senaste inläggen</Typography>
+            <Typography variant="h2">Senaste produkterna</Typography>
             <PostList />
           </Paper>
         </Grid>
