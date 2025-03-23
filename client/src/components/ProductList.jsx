@@ -1,8 +1,9 @@
-import PostItemSmall from './ProductItemSmall';
+import ProductItemSmall from './ProductItemSmall';
 import { getAll } from '../services/ProductService';
 import { useEffect, useState } from 'react';
+import { Grid, Typography } from '@mui/material';
 
-function PostList({ pathname }) {
+function ProductList({ pathname }) {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -12,20 +13,22 @@ function PostList({ pathname }) {
   }, [pathname]);
 
   return (
-    <ul>
+    <>
       {posts?.length > 0 ? (
-        posts
-          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-          .map((post) => (
-            <li key={`posts_${post.id}`}>
-              <PostItemSmall post={post} />
-            </li>
-          ))
+        <Grid container spacing={2}>
+          {posts
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            .map((post) => (
+              <Grid item xs={12} sm={6} md={4} key={`posts_${post.id}`}>
+                <ProductItemSmall post={post} />
+              </Grid>
+            ))}
+        </Grid>
       ) : (
-        <h3>Kunde inte hämta produkter</h3>
+        <Typography variant="h5">Kunde inte hämta produkter</Typography>
       )}
-    </ul>
+    </>
   );
 }
 
-export default PostList;
+export default ProductList;

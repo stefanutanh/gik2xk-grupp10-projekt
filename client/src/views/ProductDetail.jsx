@@ -80,6 +80,13 @@ function PostDetail() {
             variant="contained"
             onClick={() => navigate(`/posts/${post.id}/edit`)}
           >
+            Lägg till i varukorg
+          </Button>
+          <Button
+            startIcon={<EditIcon />}
+            variant="contained"
+            onClick={() => navigate(`/posts/${post.id}/edit`)}
+          >
             Ändra
           </Button>
         </Box>
