@@ -40,26 +40,44 @@ Object.keys(db).forEach((modelName) => {
   }
 });
 
-db.post.belongsTo(db.user, { foreignKey: { allowNull: false } });
-db.user.hasMany(db.post, {
-  allowNull: false,
+User.hasMany(Cart, { 
+  foreignKey: { name: 'user_id', allowNull: false },
+  onDelete: 'CASCADE'
+});
+Cart.belongsTo(User, { 
+  foreignKey: { name: 'user_id', allowNull: false },
   onDelete: 'CASCADE'
 });
 
-db.comment.belongsTo(db.post);
-db.post.hasMany(db.comment, {
-  allowNull: false,
+// En Cart har många CartRows. Vid borttagning av en Cart raderas alla CartRows.
+Cart.hasMany(CartRow, { 
+  foreignKey: { name: 'cart_id', allowNull: false },
+  onDelete: 'CASCADE'
+});
+CartRow.belongsTo(Cart, { 
+  foreignKey: { name: 'cart_id', allowNull: false },
   onDelete: 'CASCADE'
 });
 
-db.comment.belongsTo(db.user);
-db.user.hasMany(db.comment, {
-  allowNull: false,
+// En Product kan ha många CartRows. Om en Product tas bort så tas även raderna bort.
+Product.hasMany(CartRow, { 
+  foreignKey: { name: 'product_id', allowNull: false },
+  onDelete: 'CASCADE'
+});
+CartRow.belongsTo(Product, { 
+  foreignKey: { name: 'product_id', allowNull: false },
   onDelete: 'CASCADE'
 });
 
-db.post.belongsToMany(db.tag, { through: db.postTag });
-db.tag.belongsToMany(db.post, { through: db.postTag });
+// En Product kan ha många Ratings. Vid borttagning av en produkt raderas också betygen.
+Product.hasMany(Rating, { 
+  foreignKey: { name: 'product_id', allowNull: false },
+  onDelete: 'CASCADE'
+});
+Rating.belongsTo(Product, { 
+  foreignKey: { name: 'product_id', allowNull: false },
+  onDelete: 'CASCADE'
+});
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
