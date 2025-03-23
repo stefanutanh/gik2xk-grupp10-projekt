@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { create, getOne, remove, update } from '../services/PostService';
+import { create, getOne, remove, update } from '../services/ProductService';
 import {
   Box,
   Button,
@@ -48,7 +48,7 @@ function PostEdit() {
       create(post).then((response) => {
         navigate('/', {
           replace: true,
-          state: { message: `Inlägget ${response.title} skapades.` }
+          state: { message: `Produkten ${response.title} skapades.` }
         });
       });
     } else {
@@ -87,7 +87,7 @@ function PostEdit() {
   return (
     <Container maxWidth="lg">
       <Typography variant="h4" component="h2">
-        {post.id ? 'Ändra inlägg' : 'Skapa inlägg'}
+        {post.id ? 'Ändra produkt' : 'Skapa produkt'}
       </Typography>
       <Box mt={4}>
         <form>

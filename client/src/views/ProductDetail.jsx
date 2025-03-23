@@ -1,32 +1,49 @@
-import PostItemLarge from '../components/PostItemLarge';
-import CommentForm from '../components/CommentForm';
-import Comment from '../components/Comment';
+import PostItemLarge from '../components/ProductItemLarge';
+import CommentForm from '../components/RatingForm';
+import Comment from '../components/Rating';
 import { Alert, Box, Button, Container, List, Typography } from '@mui/material';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { addComment, getOne } from '../services/PostService';
+import { addComment, getOne } from '../services/ProductService';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import EditIcon from '@mui/icons-material/Edit';
+import Rating from '@mui/material/Rating';
+
+// Separat komponent för betygssystemet
+function BasicRating() {
+  const [value, setValue] = useState(2);
+
+  return (
+    <Box sx={{ '& > legend': { mt: 2 } }}>
+      <Typography component="legend">Betyg</Typography>
+      <Rating
+        name="simple-controlled"
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue);
+        }}
+      />
+    </Box>
+  );
+}
 
 function PostDetail() {
   const { id } = useParams();
-
   const [post, setPost] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const message = location.state?.message;
+  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     getOne(id).then((post) => setPost(post));
   }, [id]);
 
-  const navigate = useNavigate();
-
   function onCommentAdd(comment) {
     addComment(post.id, comment)
-      .then((comment) => getOne(id))
+      .then(() => getOne(id))
       .then((post) => setPost(post));
   }
-  const location = useLocation();
-  const message = location.state?.message;
-  const [open, setOpen] = useState(true);
 
   function clearMessage() {
     window.history.replaceState({}, '');
@@ -41,7 +58,8 @@ function PostDetail() {
             clearMessage();
           }}
           variant="filled"
-          severity="success">
+          severity="success"
+        >
           {message}
         </Alert>
       )}
@@ -53,16 +71,22 @@ function PostDetail() {
             color="secondary"
             startIcon={<ChevronLeftIcon />}
             sx={{ mr: 2 }}
-            onClick={() => navigate(-1)}>
+            onClick={() => navigate(-1)}
+          >
             Tillbaka
           </Button>
           <Button
             startIcon={<EditIcon />}
             variant="contained"
-            onClick={() => navigate(`/posts/${post.id}/edit`)}>
+            onClick={() => navigate(`/posts/${post.id}/edit`)}
+          >
             Ändra
           </Button>
         </Box>
+
+        
+        <BasicRating />
+
         <Box>
           <Typography variant="h3">Kommentarer</Typography>
           <CommentForm onSave={onCommentAdd} />

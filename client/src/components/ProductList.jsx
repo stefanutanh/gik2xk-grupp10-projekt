@@ -1,5 +1,5 @@
-import PostItemSmall from './PostItemSmall';
-import { getAll } from '../services/PostService';
+import PostItemSmall from './ProductItemSmall';
+import { getAll } from '../services/ProductService';
 import { useEffect, useState } from 'react';
 
 function PostList({ pathname }) {
@@ -22,7 +22,7 @@ function PostList({ pathname }) {
             </li>
           ))
       ) : (
-        <h3>Kunde inte hämta inlägg</h3>
+        <h3>Kunde inte hämta produkter</h3>
       )}
     </ul>
   );

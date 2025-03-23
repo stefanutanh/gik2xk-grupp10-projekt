@@ -1,5 +1,5 @@
 import { useParams, useLocation } from 'react-router-dom';
-import PostList from '../components/PostList';
+import PostList from '../components/ProductList';
 
 function Posts() {
   console.log(useParams(), useLocation());

@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
-import PostEdit from './views/PostEdit.jsx';
-import Posts from './views/Posts.jsx';
-import PostDetail from './views/PostDetail.jsx';
+import PostEdit from './views/ProductEdit.jsx';
+import Posts from './views/Product.jsx';
+import PostDetail from './views/ProductDetail.jsx';
 import Home from './views/Home.jsx';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';

@@ -18,7 +18,7 @@ function App() {
               <Link to="/">Webbshopshelvete</Link>
             </Typography>
             <Button color="inherit">
-              <Link to="/posts/new">Skapa produkt</Link>
+              <Link to="/product/new">Skapa produkt</Link>
             </Button>
           </Toolbar>
         </AppBar>

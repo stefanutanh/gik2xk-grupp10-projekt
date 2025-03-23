@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
-import PostList from '../components/PostList';
+import PostList from '../components/ProductList';
 import TagList from '../components/TagList';
-import UserList from '../components/UserList';
+import CartView from '../components/CartView';
 import { Alert, Grid, Paper, Typography } from '@mui/material';
 import { useState } from 'react';
 
@@ -36,7 +36,7 @@ function Home() {
         <Grid component="section" item xs={12} md={4}>
           <Paper elevation={3} sx={{ p: 2, mt: 4, borderRadius: 2 }}>
             <Typography variant="h2">Varukorg</Typography>
-            <UserList />
+            <CartView />
           </Paper>
           <Paper elevation={3} sx={{ p: 2, mt: 4, borderRadius: 2 }}>
             <Typography variant="h2">Taggar</Typography>

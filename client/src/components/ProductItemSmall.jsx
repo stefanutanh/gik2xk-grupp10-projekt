@@ -28,18 +28,6 @@ function PostItemSmall({ post }) {
               <Link to={`/posts/${post.id}`}>{post.title}</Link>
             </Typography>
           }
-          subheader={`Skrivet: ${toRelativeDateString(post.createdAt)}`}
-          avatar={
-            <UserItemSmall
-              style={{
-                minWidth: '7rem',
-                paddingRight: '.7rem',
-                marginRight: '.5rem',
-                borderRight: `1px solid ${grey[400]}`
-              }}
-              user={post.author}
-            />
-          }
         />
         <CardMedia
           component="img"
