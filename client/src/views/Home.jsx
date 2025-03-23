@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import PostList from '../components/ProductList';
+import ProductList from '../components/ProductList';
 import TagList from '../components/TagList';
 import CartView from '../components/CartView';
 import { Alert, Grid, Paper, Typography } from '@mui/material';
@@ -30,7 +30,7 @@ function Home() {
         <Grid component="section" item xs={12} md={8}>
           <Paper elevation={3} sx={{ p: 2, mt: 4, borderRadius: 2 }}>
             <Typography variant="h2">Senaste produkterna</Typography>
-            <PostList />
+            <ProductList />
           </Paper>
         </Grid>
         <Grid component="section" item xs={12} md={4}>
