@@ -35,6 +35,4 @@ router.delete('/', (req, res) => {
     
 });
 
-router.post('/:id/addToCart', (req, res) => {});
-
 module.exports = router;

@@ -52,7 +52,6 @@ function PostItemSmall({ post }) {
       >
         Läs mer
       </Button>
-      <button>Lägg till varukorg</button>
     </CardActions>
   </Card>
     

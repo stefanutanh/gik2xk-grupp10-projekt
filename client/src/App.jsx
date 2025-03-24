@@ -35,7 +35,7 @@ function App() {
   const navItems = [
     { text: 'Hem', icon: <HomeIcon />, path: '/' },
     { text: 'Skapa produkt', icon: <AddCircleIcon />, path: '/posts/new' },
-    
+    { text: 'Kategorier', icon: <TagIcon />, path: '/' }
   ];
 
   const drawer = (
