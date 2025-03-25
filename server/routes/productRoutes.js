@@ -1,14 +1,14 @@
 const router = require("express").Router();
 const postService = require('../services/productsService');
 
-// Hämta alla inlägg
+// Hämta alla produkter
 router.get('/', (req, res) => {
     postService.getAll().then((result) => {
         res.status(result.status).json(result.data);
     });
 });
 
-// Hämta ett specifikt inlägg med ID
+// Hämta  specifikt produkt med ID
 router.get('/:id', (req, res) => {
   const id = req.params.id;
 

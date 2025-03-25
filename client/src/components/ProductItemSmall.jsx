@@ -50,10 +50,12 @@ function ProductItemSmall({ product }) {
           {truncate(product.body, 100)}
         </Typography>
 
-        {/* Price Display */}
         <Typography variant="h6" sx={{ mt: 2 }}>
-          {product.price ? `Pris: ${product.price.toFixed(2)} SEK` : 'Pris ej tillgängligt'}
-        </Typography>
+  {product.price 
+    ? `Pris: ${Number(product.price).toFixed(2)} SEK` 
+    : 'Pris ej tillgängligt'
+  }
+</Typography>
       </CardContent>
       <CardActions>
         <Button

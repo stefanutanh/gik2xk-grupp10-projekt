@@ -40,7 +40,8 @@ function ProductEdit() {
 
   function onChange(e) {
     const name = e.target.name;
-    const value = e.target.value;
+    /* const value = e.target.value; */
+    const value = name === 'price' ? parseFloat(e.target.value) : e.target.value;
 
     const newproduct = { ...product, [name]: value };
     setProduct(newproduct);
@@ -126,10 +127,11 @@ function ProductEdit() {
               margin="normal"
               onChange={onChange}
               value={product.price}
-              minRows={5}
               name="price"
               id="price"
               label="Pris"
+              type="number"  
+              inputProps={{ step: "0.01" }}  
             />
           </Box>
           <Box>

@@ -88,6 +88,7 @@ async function create(product) {
     return createResponseError(422, invalidData);
   }
   try {
+    console.log('Skapar produkt:', product); 
     const newProduct = await db.product.create(product);
     
     //lägg till eventuella taggar
@@ -139,6 +140,7 @@ function _formatProduct(product) {
   const cleanProduct = {
     id: product.id,
     title: product.title,
+    price: product.price,
     body: product.body,
     imageUrl: product.imageUrl,
     createdAt: product.createdAt,
