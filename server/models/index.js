@@ -42,27 +42,21 @@ Object.keys(db).forEach((modelName) => {
 console.log('Loaded models:', Object.keys(db));
 
 db.product.belongsTo(db.user, { foreignKey: { allowNull: false } });
-db.user.hasMany(db.product, {
-  allowNull: false,
-  onDelete: 'CASCADE'
-});
+db.user.hasMany(db.product, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
+db.comment.belongsTo(db.product, { foreignKey: { allowNull: false } });
+db.product.hasMany(db.comment, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
-db.comment.belongsTo(db.product);
-db.product.hasMany(db.comment, {
-  allowNull: false,
-  onDelete: 'CASCADE'
-}); 
+db.comment.belongsTo(db.user, { foreignKey: { allowNull: false } });
+db.user.hasMany(db.comment, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
-db.comment.belongsTo(db.user);
-db.user.hasMany(db.comment, {
-  allowNull: false,
-  onDelete: 'CASCADE'
-});
-
+/* // Kontrollera att db.productTag finns, annars skapa en tom mellanmodell
+if (!db.productTag) {
+  db.productTag = sequelize.define('productTag', {}, { timestamps: false });
+} */
 
 db.product.belongsToMany(db.tag, { through: db.productTag });
-db.tag.belongsToMany(db.product, { through: db.productTag }); 
+db.tag.belongsToMany(db.product, { through: db.productTag });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

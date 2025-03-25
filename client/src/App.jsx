@@ -172,7 +172,7 @@ function App() {
       >
         <Container maxWidth="xl">
           <Typography variant="body2">
-            © {new Date().getFullYear()} Webbshopen - Tillverkad av återanvända pixlar
+            © {new Date().getFullYear()} Webbshopen - Tillverkad av 97 % återanvända pixlar
           </Typography>
         </Container>
       </Box>
