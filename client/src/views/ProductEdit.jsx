@@ -17,7 +17,7 @@ import SaveIcon from '@mui/icons-material/Save';
 function ProductEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const emptyPost = {
+  const emptyproduct = {
     id: 0,
     title: '',
     body: '',
@@ -25,41 +25,43 @@ function ProductEdit() {
     tags: [],
     userId: 2
   };
-  const [post, setPost] = useState(emptyPost);
+  /* const [product, setproduct] = useState(emptyproduct); */
+  const [product, setProduct] = useState(emptyProduct);
 
   useEffect(() => {
     if (id) {
-      getOne(id).then((post) => setPost(post));
+      getOne(id).then((product) => setProduct(product));
     } else {
-      setPost(emptyPost);
+      setProduct(emptyProduct);
     }
   }, [id]);
+  
 
   function onChange(e) {
     const name = e.target.name;
     const value = e.target.value;
 
-    const newPost = { ...post, [name]: value };
-    setPost(newPost);
+    const newproduct = { ...product, [name]: value };
+    setproduct(newproduct);
   }
 
   function onSave() {
-    if (post.id === 0) {
-      create(post).then((response) => {
+    if (product.id === 0) {
+      create(product).then((response) => {
         navigate('/', {
           replace: true,
           state: { message: `Produkten ${response.title} skapades.` }
         });
       });
     } else {
-      update(post).then((response) =>
-        navigate(`/products/${post.id}`, { replace: true, state: response })
+      update(product).then((response) =>
+        navigate(`/products/${product.id}`, { replace: true, state: response })
       );
     }
   }
 
   function onDelete() {
-    remove(post.id).then((response) =>
+    remove(product.id).then((response) =>
       navigate('/', { replace: true, state: response })
     );
   }
@@ -70,24 +72,24 @@ function ProductEdit() {
     //trimma whitespace runt taggar
     const uniqueAndTrimmedTags = tagArray
       .map((tag) => tag.trim())
-      .filter((tag) => !post.tags.includes(tag));
+      .filter((tag) => !product.tags.includes(tag));
 
     //slå samman befintlig tag-array med de nya, unika taggarna
-    const mergedArray = [...post.tags, ...uniqueAndTrimmedTags];
+    const mergedArray = [...product.tags, ...uniqueAndTrimmedTags];
 
     //spara befintligt inlägg med nya tags-arrayen till state.
-    setPost({ ...post, tags: mergedArray });
+    setproduct({ ...product, tags: mergedArray });
   }
 
   function onTagDelete(tagToDelete) {
-    const newTags = post.tags.filter((tag) => tag !== tagToDelete);
+    const newTags = product.tags.filter((tag) => tag !== tagToDelete);
 
-    setPost({ ...post, tags: newTags });
+    setproduct({ ...product, tags: newTags });
   }
   return (
     <Container maxWidth="lg">
       <Typography variant="h4" component="h2">
-        {post.id ? 'Ändra produkt' : 'Skapa produkt'}
+        {product.id ? 'Ändra produkt' : 'Skapa produkt'}
       </Typography>
       <Box mt={4}>
         <form>
@@ -96,7 +98,7 @@ function ProductEdit() {
               fullWidth
               margin="normal"
               onChange={onChange}
-              value={post.title}
+              value={product.title}
               name="title"
               id="title"
               label="Titel"
@@ -107,7 +109,7 @@ function ProductEdit() {
               fullWidth
               margin="normal"
               onChange={onChange}
-              value={post.body}
+              value={product.body}
               multiline
               minRows={5}
               name="body"
@@ -120,15 +122,15 @@ function ProductEdit() {
               fullWidth
               margin="normal"
               onChange={onChange}
-              value={post.imageUrl}
+              value={product.imageUrl}
               name="imageUrl"
               id="imageUrl"
               label="Sökväg till bild"
             />
           </Box>
           <Box mt={1}>
-            {post?.tags?.length > 0 &&
-              post.tags.map((tag) => (
+            {product?.tags?.length > 0 &&
+              product.tags.map((tag) => (
                 <Chip
                   sx={{ mr: 1 }}
                   onDelete={() => onTagDelete(tag)}

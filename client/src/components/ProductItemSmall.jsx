@@ -57,6 +57,12 @@ function ProductItemSmall({ product }) {
         >
           Läs mer
         </Button>
+        <Button
+          
+          endIcon={<ChevronRightIcon />}
+        >
+          KÖP!!
+        </Button>
       </CardActions>
     </Card>
   );

@@ -31,7 +31,7 @@ export async function getOne(id) {
 
 export async function create(product) {
   try {
-    const response = await axios.post('/products', product);
+    const response = await axios.product('/products', product);
     if (response.status === 200) return response.data;
     else {
       console.log(response.data);
@@ -73,7 +73,7 @@ export async function remove(id) {
 
 export async function addComment(productId, comment) {
   try {
-    const response = await axios.post(`/products/${productId}/addComment`, comment); // Ändrat från product till post
+    const response = await axios.product(`/products/${productId}/addComment`, comment); // Ändrat från product till product
     if (response.status === 200) return response.data;
     else {
       console.log(response.data); 
