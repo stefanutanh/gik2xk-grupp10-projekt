@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import Tag from './Tag';
-import UserItemSmall from './UserItemSmall';
+import { addToCart } from '../services/CartService'; // Import the addToCart method
+import { useState } from 'react';
 import { toRelativeDateString, truncate } from '../common/formatHelpers';
 import {
   Box,
@@ -10,19 +11,55 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
-  Typography
+  Typography,
+  
 } from '@mui/material';
 import placeholderImage from '../assets/productpictures/placeholder.png';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+
 import { grey } from '@mui/material/colors';
 
 function ProductItemSmall({ product }) {
   const navigate = useNavigate();
 
+  /* const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); */
+  
+  // lägg till i cart //
+  const handleAddToCart = async () => {
+    try {
+      const result = await addToCart(1, product.id, 1);
+      
+      if (result) {
+        setSnackbarMessage(`${product.title} tillagd i varukorgen`);
+        setSnackbarSeverity('success');
+        setOpenSnackbar(true);
+      } else {
+        setSnackbarMessage('Kunde inte lägga till produkten i varukorgen');
+        setSnackbarSeverity('error');
+        setOpenSnackbar(true);
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      setSnackbarMessage('Ett fel inträffade');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+    }
+  };
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
+
   
   if (!product) {
     return <Card sx={{ maxWidth: 345, mb: 4, p: 2 }}>
-      <Typography>Produkt information saknas</Typography>
+      <Typography>Produktinformation saknas</Typography>
     </Card>;
   }
 
@@ -64,11 +101,15 @@ function ProductItemSmall({ product }) {
         >
           Läs mer
         </Button>
-        <Button
-          endIcon={<ChevronRightIcon />}
-        >
-          KÖP!!
-        </Button>
+
+     {   <Button
+  color="primary"
+  variant="contained"
+  onClick={handleAddToCart}
+  endIcon={<ShoppingCartIcon />}
+>
+  KÖP!!
+</Button>}
       </CardActions>
     </Card>
   );

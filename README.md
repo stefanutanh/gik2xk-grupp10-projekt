@@ -49,3 +49,7 @@ slags användarroll och anpassa funktionalitet efter det. Ni får låtsas att vi
 bara är synliga för vissa användare, även fast de kanske syns hela tiden.
 Notera: För de delar som man inte kan administrera via frontend (t.ex. användare)
 används exempelvis Postman för att hantera data.
+
+
+
+https://create-react-app.dev/docs/using-the-public-folder/

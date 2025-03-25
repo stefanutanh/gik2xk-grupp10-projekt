@@ -17,6 +17,7 @@ app.use((req, res, next) => {
 app.use('/products', require('./routes/productRoutes'));
 app.use('/users', require('./routes/usersRoute'));
 app.use('/tags', require('./routes/tagsRoute'));
+app.use('/cart', require('./routes/cartRoute'));
 
 // Synkronisera databasen och starta servern
 const { sequelize } = require('./models');

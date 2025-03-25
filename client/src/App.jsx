@@ -128,7 +128,7 @@ function App() {
             </Box>
 
             {/* Shopping Cart Icon */}
-            <IconButton 
+            {/* <IconButton 
               color="inherit" 
               aria-label="shopping cart"
               sx={{ 
@@ -142,7 +142,7 @@ function App() {
               <Badge badgeContent={0} color="error">
                 <ShoppingCartIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
           </Toolbar>
         </AppBar>
         {drawer}
