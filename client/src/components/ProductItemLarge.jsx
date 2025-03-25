@@ -15,7 +15,7 @@ function ProductItemLarge({ product }) {
       <Box>
         <Typography variant="h2">{product.title}</Typography>
         <Typography variant="h6" sx={{ mt: 2 }}>
-          {product.price ? `Pris: ${product.price.toFixed(2)} SEK` : 'Pris ej tillgängligt'}
+        {product.price ? `Pris: ${parseFloat(product.price).toFixed(2)} SEK` : 'Pris ej tillgängligt'}
         </Typography>
       </Box>
       <Card elevation={0}>
