@@ -1,6 +1,6 @@
 import ProductItemLarge from '../components/ProductItemLarge';
-import CommentForm from '../components/RatingForm';
-import Comment from '../components/Rating';
+import CommentForm from '../components/CommentForm';
+import Comment from '../components/comment';
 import { Alert, Box, Button, Container, List, Typography } from '@mui/material';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
