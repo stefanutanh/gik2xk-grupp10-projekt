@@ -17,7 +17,7 @@ import SaveIcon from '@mui/icons-material/Save';
 function ProductEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const emptyproduct = {
+  const emptyProduct = {
     id: 0,
     title: '',
     body: '',
@@ -25,7 +25,7 @@ function ProductEdit() {
     tags: [],
     userId: 2
   };
-  /* const [product, setproduct] = useState(emptyproduct); */
+  /* const [product, setProduct] = useState(emptyProduct); */
   const [product, setProduct] = useState(emptyProduct);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ function ProductEdit() {
     const value = e.target.value;
 
     const newproduct = { ...product, [name]: value };
-    setproduct(newproduct);
+    setProduct(newproduct);
   }
 
   function onSave() {
@@ -78,13 +78,13 @@ function ProductEdit() {
     const mergedArray = [...product.tags, ...uniqueAndTrimmedTags];
 
     //spara befintligt inlägg med nya tags-arrayen till state.
-    setproduct({ ...product, tags: mergedArray });
+    setProduct({ ...product, tags: mergedArray });
   }
 
   function onTagDelete(tagToDelete) {
     const newTags = product.tags.filter((tag) => tag !== tagToDelete);
 
-    setproduct({ ...product, tags: newTags });
+    setProduct({ ...product, tags: newTags });
   }
   return (
     <Container maxWidth="lg">

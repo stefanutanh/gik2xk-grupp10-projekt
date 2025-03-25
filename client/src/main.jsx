@@ -127,11 +127,11 @@ const router = createBrowserRouter([
         element: <ProductEdit />
       },
       {
-        path: '/users/:id/products',
+        path: '/users/:id/Products',
         element: <products />
       },
       {
-        path: '/tags/:tag/products',
+        path: '/tags/:tag/Products',
         element: <products />
       }
     ]

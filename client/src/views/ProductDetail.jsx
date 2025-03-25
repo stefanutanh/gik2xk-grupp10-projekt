@@ -36,7 +36,15 @@ function ProductDetail() {
   const [open, setOpen] = useState(true);
 
   useEffect(() => {
-    getOne(id).then((product) => setProduct(product));
+    console.log("ProductDetail: hämtar produkt med id:", id);
+    getOne(id)
+      .then((product) => {
+        console.log("ProductDetail: hämtad produkt:", product);
+        setProduct(product);
+      })
+      .catch((error) => {
+        console.error("ProductDetail: fel vid hämtning av produkt:", error);
+      });
   }, [id]);
 
   function onCommentAdd(comment) {

@@ -5,8 +5,8 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true
     },
-    text: {
-      type: DataTypes.STRING,
+    body: {  // Istället för text
+      type: DataTypes.TEXT,
       allowNull: false
     },
     productId: {  // Se till att detta finns
@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       }
     },
+    
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -27,10 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
-  Comment.associate = (models) => {
-    Comment.belongsTo(models.product, { foreignKey: 'productId', as: 'product' });
-    Comment.belongsTo(models.user, { foreignKey: 'userId', as: 'user' });
-  };
+
 
   return Comment;
 };
