@@ -122,6 +122,18 @@ function ProductEdit() {
               fullWidth
               margin="normal"
               onChange={onChange}
+              value={product.price}
+              minRows={5}
+              name="price"
+              id="price"
+              label="Pris"
+            />
+          </Box>
+          <Box>
+            <TextField
+              fullWidth
+              margin="normal"
+              onChange={onChange}
               value={product.imageUrl}
               name="imageUrl"
               id="imageUrl"

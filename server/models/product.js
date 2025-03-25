@@ -20,9 +20,16 @@ module.exports = (sequelize, DataTypes) => {
       },
       imageUrl: {
         type: DataTypes.STRING(255)
+      },
+      price: {
+        type: DataTypes.FLOAT, 
+        allowNull: false,
+        validate: {
+          min: 0
+        }
       }
     },
     { underscored: true }
-    
   );
+  
 };
