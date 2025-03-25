@@ -128,11 +128,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/users/:id/Products',
-        element: <products />
+        element: <Products />
       },
       {
         path: '/tags/:tag/Products',
-        element: <products />
+        element: <Products />
       }
     ]
   }
