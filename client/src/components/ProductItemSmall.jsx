@@ -18,8 +18,8 @@ import { grey } from '@mui/material/colors';
 
 function ProductItemSmall({ product }) {
   const navigate = useNavigate();
+
   
-  // Guard clause to prevent rendering if product is undefined
   if (!product) {
     return <Card sx={{ maxWidth: 345, mb: 4, p: 2 }}>
       <Typography>Produkt information saknas</Typography>
@@ -49,6 +49,11 @@ function ProductItemSmall({ product }) {
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           {truncate(product.body, 100)}
         </Typography>
+
+        {/* Price Display */}
+        <Typography variant="h6" sx={{ mt: 2 }}>
+          {product.price ? `Pris: ${product.price.toFixed(2)} SEK` : 'Pris ej tillgängligt'}
+        </Typography>
       </CardContent>
       <CardActions>
         <Button
@@ -58,7 +63,6 @@ function ProductItemSmall({ product }) {
           Läs mer
         </Button>
         <Button
-          
           endIcon={<ChevronRightIcon />}
         >
           KÖP!!

@@ -21,7 +21,7 @@ app.use('/tags', require('./routes/tagsRoute'));
 // Synkronisera databasen och starta servern
 const { sequelize } = require('./models');
 sequelize.sync({ alter: true }).then(() => {
-  console.log('Databasen är synkroniserad!');s
+  console.log('Databasen är synkroniserad!');
 }).catch((err) => {
   console.error('Fel vid synkronisering av databasen:', err);
 });
