@@ -1,4 +1,4 @@
-import PostItemLarge from '../components/ProductItemLarge';
+import ProductItemLarge from '../components/ProductItemLarge';
 import CommentForm from '../components/RatingForm';
 import Comment from '../components/Rating';
 import { Alert, Box, Button, Container, List, Typography } from '@mui/material';
@@ -27,29 +27,29 @@ function BasicRating() {
   );
 }
 
-function PostDetail() {
+function ProductDetail() {
   const { id } = useParams();
-  const [post, setPost] = useState(null);
+  const [product, setProduct] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const message = location.state?.message;
   const [open, setOpen] = useState(true);
 
   useEffect(() => {
-    getOne(id).then((post) => setPost(post));
+    getOne(id).then((product) => setProduct(product));
   }, [id]);
 
   function onCommentAdd(comment) {
-    addComment(post.id, comment)
+    addComment(product.id, comment)
       .then(() => getOne(id))
-      .then((post) => setPost(post));
+      .then((product) => setProduct(product));
   }
 
   function clearMessage() {
     window.history.replaceState({}, '');
   }
 
-  return post ? (
+  return product ? (
     <>
       {message && open && (
         <Alert
@@ -64,7 +64,7 @@ function PostDetail() {
         </Alert>
       )}
       <Container maxWidth="lg">
-        <PostItemLarge post={post} />
+        <ProductItemLarge product={product} />
         <Box display="flex" justifyContent="space-between" mb={4}>
           <Button
             variant="contained"
@@ -78,14 +78,14 @@ function PostDetail() {
           <Button
             startIcon={<EditIcon />}
             variant="contained"
-            onClick={() => navigate(`/posts/${post.id}/edit`)}
+            onClick={() => navigate(`/products/${product.id}/edit`)}
           >
             Lägg till i varukorg
           </Button>
           <Button
             startIcon={<EditIcon />}
             variant="contained"
-            onClick={() => navigate(`/posts/${post.id}/edit`)}
+            onClick={() => navigate(`/products/${product.id}/edit`)}
           >
             Ändra
           </Button>
@@ -97,9 +97,9 @@ function PostDetail() {
         <Box>
           <Typography variant="h3">Kommentarer</Typography>
           <CommentForm onSave={onCommentAdd} />
-          {post.comments && (
+          {product.comments && (
             <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-              {post.comments.map((comment, i) => (
+              {product.comments.map((comment, i) => (
                 <Comment key={`comment_${i}`} comment={comment} />
               ))}
             </List>
@@ -108,8 +108,8 @@ function PostDetail() {
       </Container>
     </>
   ) : (
-    <h3>Kunde inte hämta inlägg</h3>
+    <h3>Kunde inte hämta produkt</h3>
   );
 }
 
-export default PostDetail;
+export default ProductDetail;

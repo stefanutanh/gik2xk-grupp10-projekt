@@ -33,7 +33,7 @@ function App() {
 
   const navItems = [
     { text: 'Hem', icon: <HomeIcon />, path: '/' },
-    { text: 'Skapa produkt', icon: <AddCircleIcon />, path: '/posts/new' },
+    { text: 'Skapa produkt', icon: <AddCircleIcon />, path: '/products/new' },
     
   ];
 
@@ -172,7 +172,7 @@ function App() {
       >
         <Container maxWidth="xl">
           <Typography variant="body2">
-            © {new Date().getFullYear()} Webbshopen - Alla rättigheter reserverade
+            © {new Date().getFullYear()} Webbshopen - Tillverkad av återanvända pixlar
           </Typography>
         </Container>
       </Box>

@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const db = require('../models');
 const validate = require('validate.js');
-const postService = require('../services/postService');
+const postService = require('../services/productsService');
 
 const constraints = {
   email: {

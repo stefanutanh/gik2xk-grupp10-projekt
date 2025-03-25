@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
-import PostEdit from './views/ProductEdit.jsx';
-import Posts from './views/Product.jsx';
-import PostDetail from './views/ProductDetail.jsx';
+import ProductEdit from './views/ProductEdit.jsx';
+import Products from './views/Product.jsx';
+import ProductDetail from './views/ProductDetail.jsx';
 import Home from './views/Home.jsx';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -115,24 +115,24 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
-        path: '/posts/:id/edit',
-        element: <PostEdit />
+        path: '/products/:id/edit',
+        element: <ProductEdit />
       },
       {
-        path: '/posts/:id',
-        element: <PostDetail />
+        path: '/products/:id',
+        element: <ProductDetail />
       },
       {
-        path: '/posts/new',
-        element: <PostEdit />
+        path: '/products/new',
+        element: <ProductEdit />
       },
       {
-        path: '/users/:id/posts',
-        element: <Posts />
+        path: '/users/:id/products',
+        element: <products />
       },
       {
-        path: '/tags/:tag/posts',
-        element: <Posts />
+        path: '/tags/:tag/products',
+        element: <products />
       }
     ]
   }

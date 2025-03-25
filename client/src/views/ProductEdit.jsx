@@ -14,7 +14,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 
-function PostEdit() {
+function ProductEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
   const emptyPost = {
@@ -53,7 +53,7 @@ function PostEdit() {
       });
     } else {
       update(post).then((response) =>
-        navigate(`/posts/${post.id}`, { replace: true, state: response })
+        navigate(`/products/${post.id}`, { replace: true, state: response })
       );
     }
   }
@@ -173,4 +173,4 @@ function PostEdit() {
   );
 }
 
-export default PostEdit;
+export default ProductEdit;

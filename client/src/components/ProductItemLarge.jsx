@@ -7,11 +7,9 @@ import {
   Typography
 } from '@mui/material';
 import Tag from './Tag';
-import UserItemSmall from './UserItemSmall';
-import { toDateTimeString } from '../common/formatHelpers';
 import placeholderImage from '../assets/productpictures/placeholder.png';
 
-function PostItemLarge({ post }) {
+function ProductItemLarge({ post }) {
   return (
     <Paper sx={{ my: 4, p: 4, borderRadius: 2 }} elevation={3}>
       <Box>
@@ -30,4 +28,4 @@ function PostItemLarge({ post }) {
   );
 }
 
-export default PostItemLarge;
+export default ProductItemLarge;

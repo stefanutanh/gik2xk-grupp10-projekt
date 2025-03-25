@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const db = require('../models');
-const postService = require('../services/postService');
+const postService = require('../services/productsService');
 
 router.get('/:name/posts', (req, res) => {
   const name = req.params.name;

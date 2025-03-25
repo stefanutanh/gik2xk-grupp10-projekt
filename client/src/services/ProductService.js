@@ -1,6 +1,6 @@
 import axios from './api';
 
-export async function getAll(endpoint = '/posts') {
+export async function getAll(endpoint = '/products') {
   try {
     const response = await axios.get(endpoint);
 
@@ -16,7 +16,7 @@ export async function getAll(endpoint = '/posts') {
 
 export async function getOne(id) {
   try {
-    const response = await axios.get(`/posts/${id}`);
+    const response = await axios.get(`/products/${id}`);
     if (response.status === 200) return response.data;
     else {
       console.log(response.data);
@@ -27,9 +27,9 @@ export async function getOne(id) {
   }
 }
 
-export async function create(post) {
+export async function create(product) {
   try {
-    const response = await axios.post('/posts', post);
+    const response = await axios.post('/products', product);
     if (response.status === 200) return response.data;
     else {
       console.log(response.data);
@@ -40,9 +40,9 @@ export async function create(post) {
   }
 }
 
-export async function update(post) {
+export async function update(product) {
   try {
-    const response = await axios.put('/posts', post);
+    const response = await axios.put('/products', product);
     if (response.status === 200) return response.data;
     else {
       console.log(response.data);
@@ -55,7 +55,7 @@ export async function update(post) {
 
 export async function remove(id) {
   try {
-    const response = await axios.delete('/posts', { data: { id } });
+    const response = await axios.delete('/products', { data: { id } });
     if (response.status === 200) return response.data;
     else {
       console.log(data);
@@ -66,9 +66,9 @@ export async function remove(id) {
   }
 }
 
-export async function addComment(postId, comment) {
+export async function addComment(productId, comment) {
   try {
-    const response = await axios.post(`/posts/${postId}/addComment`, comment);
+    const response = await axios.product(`/products/${productId}/addComment`, comment);
     if (response.status === 200) return response.data;
     else {
       console.log(data);

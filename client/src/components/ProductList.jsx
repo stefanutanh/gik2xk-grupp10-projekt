@@ -4,23 +4,23 @@ import { useEffect, useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 
 function ProductList({ pathname }) {
-  const [posts, setPosts] = useState([]);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    getAll(pathname).then((posts) => {
-      setPosts(posts);
+    getAll(pathname).then((products) => {
+      setProducts(products);
     });
   }, [pathname]);
 
   return (
     <>
-      {posts?.length > 0 ? (
+      {products?.length > 0 ? (
         <Grid container spacing={2}>
-          {posts
+          {products
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-            .map((post) => (
-              <Grid item xs={12} sm={6} md={4} key={`posts_${post.id}`}>
-                <ProductItemSmall post={post} />
+            .map((product) => (
+              <Grid item xs={12} sm={6} md={4} key={`products_${product.id}`}>
+                <ProductItemSmall product={product} />
               </Grid>
             ))}
         </Grid>

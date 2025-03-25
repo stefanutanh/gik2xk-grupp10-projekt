@@ -14,7 +14,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/posts', require('./routes/postsRoute'));
+app.use('/products', require('./routes/productRoutes'));
 app.use('/users', require('./routes/usersRoute'));
 app.use('/tags', require('./routes/tagsRoute'));
 

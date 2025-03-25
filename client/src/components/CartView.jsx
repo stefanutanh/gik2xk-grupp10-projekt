@@ -17,7 +17,7 @@ function UserList() {
           </li>
         ))
       ) : (
-        <h3>Kunde inte hämta användare</h3>
+        <h3>Kunde inte hämta varor</h3>
       )}
     </ul>
   );
