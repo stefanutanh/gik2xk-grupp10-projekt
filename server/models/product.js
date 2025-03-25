@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     price: { // Lägg till detta attribut
       type: DataTypes.FLOAT,  // eller DECIMAL beroende på dina behov
-      allowNull: true  // Om det är ett valfritt fält
+      allowNull: false  // Om det är ett valfritt fält
     }
   }, { underscored: true });
 };

@@ -20,12 +20,13 @@ function ProductEdit() {
   const emptyProduct = {
     id: 0,
     title: '',
+    price: '',
     body: '',
     imageUrl: '',
-    tags: [],
-    userId: 2
+    
+    userId: 1
   };
-  /* const [product, setProduct] = useState(emptyProduct); */
+  
   const [product, setProduct] = useState(emptyProduct);
 
   useEffect(() => {
@@ -58,6 +59,8 @@ function ProductEdit() {
         navigate(`/products/${product.id}`, { replace: true, state: response })
       );
     }
+    console.log('Uppdaterar produkt med ID:', id, 'Pris:', price); // För att se vad som skickas till backend
+
   }
 
   function onDelete() {
