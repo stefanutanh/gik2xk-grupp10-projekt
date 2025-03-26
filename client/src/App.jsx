@@ -54,6 +54,16 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    // Försök ladda varukorgen direkt
+    loadCartCount();
+    
+    // Skapa en timer med längre intervall för att minska belastningen
+    const intervalId = setInterval(loadCartCount, 60000); // En gång i minuten istället för 30 sekunder
+    
+    return () => clearInterval(intervalId); // Rensa timern när komponenten avmonteras
+  }, []);
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };

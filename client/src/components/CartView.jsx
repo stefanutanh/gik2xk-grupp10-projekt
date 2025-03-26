@@ -35,8 +35,14 @@ function CartView() {
     setLoading(true);
     try {
       const items = await getAll();
-      setCartItems(Array.isArray(items) ? items : []);
-      calculateTotal(Array.isArray(items) ? items : []);
+      // Säkerställ att vi hanterar både null och undefined samt andra oförväntade värden
+      if (items && Array.isArray(items)) {
+        setCartItems(items);
+        calculateTotal(items);
+      } else {
+        setCartItems([]);
+        setTotalPrice(0);
+      }
       setError(null);
     } catch (err) {
       console.error("Fel vid hämtning av varukorg:", err);

@@ -62,48 +62,7 @@ const theme = createTheme({
     body2: { color: blueGrey[800] }
   }
 });
-//Exempel alternativ mörkt tema. Byt ut till <ThemeProvider theme={darkTheme}> nedan för att testa.
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-    background: {
-      default: '#18041A',
-      paper: '#351338'
-    },
-    primary: {
-      main: orange['A400']
-    },
-    secondary: {
-      main: purple['A700']
-    },
-    success: { main: green['A400'] },
-    error: {
-      main: red['A400']
-    }
-  },
-  typography: {
-    fontFamily: '"Ubuntu", "Roboto", "Helvetica", "Arial", sans-serif',
-    h1: {
-      fontFamily: 'Satisfy, sans-serif',
-      fontSize: '3.7rem',
-      color: orange['A400']
-    },
-    h2: {
-      fontSize: '2.1rem',
-      marginBottom: '.7rem',
-      color: grey[200]
-    },
-    h3: {
-      fontSize: '1.6rem'
-    },
-    h4: {
-      fontSize: '1.3rem',
-      color: 'rgb(106,77,123)'
-    },
-    body1: { color: grey[50] },
-    body2: { color: grey[200] }
-  }
-});
+
 
 const router = createBrowserRouter([
   {
