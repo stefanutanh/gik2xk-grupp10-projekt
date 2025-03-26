@@ -1,4 +1,3 @@
-// cartRoutes.js
 const express = require('express');
 const cartService = require('../services/cartService');
 const {
@@ -9,16 +8,6 @@ const {
 
 const router = express.Router();
 
-/* // GET /cart - Hämta alla varukorgar (admin)
-router.get('/', async (req, res) => {
-  try {
-    const carts = await cartService.getAll();
-    res.json(createResponseSuccess(carts));
-  } catch (error) {
-    console.error('Error handling GET /cart:', error);
-    res.status(500).json(createResponseError(error.message));
-  }
-}); */
 
 // POST /cart/addProduct - Lägg till produkt i varukorg
 router.post('/addProduct', async (req, res) => {
@@ -99,5 +88,26 @@ router.get('/user/:userId', async (req, res) => {
     res.status(500).json(createResponseError(error.message));
   }
 });
+
+router.get('/', async (req, res) => {
+  try {
+    // Om ett userId finns i query params, hämta bara deras varukorg
+    const userId = req.query.userId;
+    
+    let carts;
+    if (userId) {
+      carts = await cartService.getUserCart(userId);
+    } else {
+      // Annars hämta alla varukorgar (för admins)
+      carts = await cartService.getAllCarts();
+    }
+    
+    res.json(createResponseSuccess(carts));
+  } catch (error) {
+    console.error('Error handling GET /cart:', error);
+    res.status(500).json(createResponseError(error.message));
+  }
+});
+
 
 module.exports = router;

@@ -42,26 +42,17 @@ async function getById(id) {
 
 async function getAll() {
   try {
-    const allProducts = await db.product.findAll({ include: [db.user] });
-    /* Om allt blev bra, returnera allProducts */
-    return createResponseSuccess(allProducts.map((product) => _formatProduct(product)));
+    // Lägg till loggning för felsökning
+    const products = await db.product.findAll();
+    console.log("Found products:", products.length);
+    return products;
   } catch (error) {
-    return createResponseError(error.status, error.message);
+    console.error("Error in getAll:", error);
+    throw error;
   }
 }
 
-async function addComment(id, comment) {
-  if (!id) {
-    return createResponseError(422, 'Id är obligatoriskt');
-  }
-  try {
-    comment.productId = id;
-    const newComment = await db.comment.create(comment);
-    return createResponseSuccess(newComment);
-  } catch (error) {
-    return createResponseError(error.status, error.message);
-  }
-}
+
 
 async function create(product) {
   const invalidData = validate(product, constraints);
@@ -155,8 +146,8 @@ module.exports = {
   
   getById,
   getAll,
-  addComment,
   create,
   update,
-  destroy
+  destroy,
+  _formatProduct
 };

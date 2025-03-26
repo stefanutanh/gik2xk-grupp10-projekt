@@ -45,18 +45,16 @@ console.log('Loaded models:', Object.keys(db));
 
 
 
+// Associationer 
+db.product.belongsTo(db.user, { foreignKey: 'userId', allowNull: false });
+db.user.hasMany(db.product, { foreignKey: 'userId', allowNull: false, onDelete: 'CASCADE' });
 
-db.product.belongsTo(db.user, { foreignKey: { allowNull: false } });
-db.user.hasMany(db.product, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-
-
-
-// Associationer för varukorg
 db.cart.hasMany(db.cartRow, { foreignKey: 'cartId', as: 'cartRows' });
-db.cartRow.belongsTo(db.cart, { foreignKey: 'cartId' });
+db.cartRow.belongsTo(db.cart, { as: 'cart', foreignKey: 'cartId' });
 
-db.product.hasMany(db.cartRow, { foreignKey: 'productId' });
-db.cartRow.belongsTo(db.product, { foreignKey: 'productId', as: 'product' });
+db.cartRow.belongsTo(db.product, { as: 'product', foreignKey: 'productId' });
+db.product.hasMany(db.cartRow, { as: 'cartRows', foreignKey: 'productId' });
+
 
 db.user.hasMany(db.cart, { foreignKey: 'userId' });
 db.cart.belongsTo(db.user, { foreignKey: 'userId' });

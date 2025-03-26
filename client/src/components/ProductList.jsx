@@ -7,16 +7,20 @@ function ProductList({ pathname }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    getAll(pathname).then((products) => {
-      setProducts(products);
-    });
+    getAll(pathname)
+      .then((products) => setProducts(products || [])) // Säkerställ alltid en array
+      .catch((error) => {
+        console.error("Fel vid hämtning av produkter:", error);
+        setProducts([]);
+      });
   }, [pathname]);
 
   return (
     <>
-      {products?.length > 0 ? (
+      {products.length > 0 ? (
         <Grid container spacing={2}>
           {products
+            .filter((p) => p && p.createdAt) // Filtrera bort null och produkter utan datum
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
             .map((product) => (
               <Grid item xs={12} sm={6} md={4} key={`products_${product.id}`}>
@@ -25,7 +29,9 @@ function ProductList({ pathname }) {
             ))}
         </Grid>
       ) : (
-        <Typography variant="h5">Kunde inte hämta produkter</Typography>
+        <Typography variant="h5">
+          {products.length === 0 ? "Inga produkter hittades" : "Kunde inte hämta produkter"}
+        </Typography>
       )}
     </>
   );

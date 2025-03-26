@@ -58,7 +58,7 @@ function ProductEdit() {
         navigate(`/products/${product.id}`, { replace: true, state: response })
       );
     }
-    console.log('Uppdaterar produkt med ID:', id, 'Pris:', price); // För att se vad som skickas till backend
+    console.log('Uppdaterar produkt med ID:', id, 'Pris:', product.price); // För att se vad som skickas till backend
 
   }
 

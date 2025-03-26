@@ -31,50 +31,12 @@ function CartView() {
     severity: 'success'
   });
 
- /*  // Ladda varukorgen vid komponentmontering
-  useEffect(() => {
-    loadCart();
-  }, []);
-
-  // Funktion för att ladda varukorgen
   const loadCart = async () => {
     setLoading(true);
     try {
-      const response = await getAll();
-      
-      // Logga svaret för att se strukturen
-      console.log("API-svar från getAll:", response);
-      
-      // Extrahera array från API-svaret baserat på strukturen
-      // Detta bör anpassas efter din verkliga API-svarsstruktur
-      let items = [];
-      
-      if (response) {
-        // Om svaret innehåller data-fältet (vanligt format för många API:er)
-        if (response.data) {
-          items = Array.isArray(response.data) ? response.data : [];
-        } 
-        // Vissa API:er returnerar data direkt
-        else if (Array.isArray(response)) {
-          items = response;
-        }
-        // Om data finns i ett annat fält, t.ex. cartRows
-        else if (response.cartRows && Array.isArray(response.cartRows)) {
-          items = response.cartRows;
-        }
-        // För vårt projekt specifikt, kanske det är ett responseData objekt med en items array
-        else if (response.responseData && Array.isArray(response.responseData.items)) {
-          items = response.responseData.items;
-        }
-        // Fallback om inget av ovanstående fungerar
-        else {
-          console.warn("Kunde inte identifiera array-struktur i API-svaret:", response);
-          items = [];
-        }
-      }
-      
-      setCartItems(items);
-      calculateTotal(items);
+      const items = await getAll();
+      setCartItems(Array.isArray(items) ? items : []);
+      calculateTotal(Array.isArray(items) ? items : []);
       setError(null);
     } catch (err) {
       console.error("Fel vid hämtning av varukorg:", err);
@@ -82,7 +44,12 @@ function CartView() {
     } finally {
       setLoading(false);
     }
-  }; */
+  };
+  
+
+  useEffect(() => {
+    loadCart();
+  }, []);
 
   // Beräkna totalt pris
   const calculateTotal = (items) => {
