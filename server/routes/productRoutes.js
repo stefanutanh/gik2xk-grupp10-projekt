@@ -66,18 +66,14 @@ router.delete('/', async (req, res) => {
   }
 });
 
-// Lägg till rating för en produkt
-router.post('/:id/addRating', async (req, res) => {
+// Hämta alla ratings för en produkt
+router.get('/:id/ratings', async (req, res) => {
   try {
     const productId = req.params.id;
-    const rating = req.body;
-    
-    // Implementera logik för att lägga till ett betyg
-    // För närvarande finns det inte implementerat i productsService
-    
-    res.status(200).json(createResponseSuccess({ message: 'Rating functionality to be implemented' }));
+    const result = await ratingService.getRatingsByProductId(productId);
+    res.status(result.status).json(result.data);
   } catch (error) {
-    console.error('Error in POST /products/:id/addRating:', error);
+    console.error('Error in GET /products/:id/ratings:', error);
     res.status(500).json(createResponseError(error.message));
   }
 });

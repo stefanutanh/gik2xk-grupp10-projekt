@@ -1,9 +1,10 @@
 import ProductItemLarge from '../components/ProductItemLarge';
+import axios from '../services/api';
 
-import { Alert, Box, Button, Container, List, Typography, Snackbar } from '@mui/material';
+import { Alert, Box, Button, Container, Paper, Typography, Snackbar, Divider } from '@mui/material';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import {  getOne } from '../services/ProductService';
+import { getOne } from '../services/ProductService';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import EditIcon from '@mui/icons-material/Edit';
 import Rating from '@mui/material/Rating';
@@ -11,21 +12,98 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { addToCart } from '../services/CartService';
 
 
-// Separat komponent för betygssystemet
-function BasicRating() {
-  const [value, setValue] = useState(2);
+// Komponent för betyg och betygsättning
+function ProductRating({ productId, onRatingSuccess }) {
+  const [value, setValue] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
+  const [ratingCount, setRatingCount] = useState(0);
+  const [error, setError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  // Läs in tidigare betyg
+  useEffect(() => {
+    const fetchRatings = async () => {
+      try {
+        const response = await axios.get(`/products/${productId}/ratings`);
+        if (response.data) {
+          setAverageRating(response.data.averageRating || 0);
+          setRatingCount(response.data.count || 0);
+        }
+      } catch (err) {
+        console.error("Fel vid hämtning av betyg:", err);
+        setError("Kunde inte hämta produktbetyg");
+      }
+    };
+
+    if (productId) {
+      fetchRatings();
+    }
+  }, [productId]);
+
+  // Skicka betygsättning
+  const handleRatingChange = async (event, newValue) => {
+    setValue(newValue);
+    if (newValue > 0) {
+      setSubmitting(true);
+      try {
+        const response = await axios.post(`/products/${productId}/addRating`, {
+          rating: newValue,
+          userId: 1 // Hårdkodad användare för enkelhetens skull
+        });
+        
+        if (response.data) {
+          // Uppdatera genomsnittsbetyg och räknare
+          setAverageRating(response.data.averageRating || averageRating);
+          setRatingCount(ratingCount + 1);
+          setError(null);
+          if (onRatingSuccess) {
+            onRatingSuccess("Tack för ditt betyg!");
+          }
+        }
+      } catch (err) {
+        console.error("Fel vid betygsättning:", err);
+        setError("Kunde inte spara ditt betyg");
+        if (onRatingSuccess) {
+          onRatingSuccess("Ett fel uppstod vid betygsättning", "error");
+        }
+      } finally {
+        setSubmitting(false);
+      }
+    }
+  };
 
   return (
-    <Box sx={{ '& > legend': { mt: 2 } }}>
-      <Typography component="legend">Betyg</Typography>
-      <Rating
-        name="simple-controlled"
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-      />
-    </Box>
+    <Paper elevation={2} sx={{ p: 3, mt: 3, mb: 3 }}>
+      <Typography variant="h6" gutterBottom>Betygsätt produkten</Typography>
+      
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+        <Rating
+          name="simple-controlled"
+          value={value}
+          onChange={handleRatingChange}
+          disabled={submitting}
+          size="large"
+        />
+        <Box sx={{ ml: 2 }}>
+          <Typography variant="body2" color="text.secondary">
+            Klicka för att betygsätta
+          </Typography>
+        </Box>
+      </Box>
+      
+      <Divider sx={{ my: 2 }} />
+      
+      <Typography variant="body1" gutterBottom>
+        Genomsnittligt betyg: <strong>{averageRating.toFixed(1)}</strong> / 5
+        {ratingCount > 0 && ` (${ratingCount} betyg)`}
+      </Typography>
+      
+      {error && (
+        <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+          {error}
+        </Typography>
+      )}
+    </Paper>
   );
 }
 
@@ -33,6 +111,8 @@ function BasicRating() {
 function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const message = location.state?.message;
@@ -70,17 +150,51 @@ function ProductDetail() {
     setOpenSnackbar(false);
   };
 
+  const handleRatingSuccess = (message, severity = 'success') => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setOpenSnackbar(true);
+  };
+
   useEffect(() => {
+    setLoading(true);
     getOne(id)
       .then((product) => {
         setProduct(product);
+        setError(null);
       })
       .catch((error) => {
         console.error("ProductDetail: fel vid hämtning av produkt:", error);
+        setError("Kunde inte hämta produkten");
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [id]);
 
+  if (loading) {
+    return (
+      <Container maxWidth="lg">
+        <Typography variant="h5">Laddar produkt...</Typography>
+      </Container>
+    );
+  }
 
+  if (error) {
+    return (
+      <Container maxWidth="lg">
+        <Typography variant="h5" color="error">{error}</Typography>
+        <Button
+          variant="contained"
+          startIcon={<ChevronLeftIcon />}
+          onClick={() => navigate('/')}
+          sx={{ mt: 2 }}
+        >
+          Tillbaka till startsidan
+        </Button>
+      </Container>
+    );
+  }
 
   return product ? (
     <>
@@ -88,7 +202,6 @@ function ProductDetail() {
         <Alert
           onClose={() => {
             setOpen(false);
-            clearMessage();
           }}
           variant="filled"
           severity="success"
@@ -98,6 +211,7 @@ function ProductDetail() {
       )}
       <Container maxWidth="lg">
         <ProductItemLarge product={product} />
+        
         <Box display="flex" justifyContent="space-between" mb={4}>
           <Button
             variant="contained"
@@ -115,7 +229,7 @@ function ProductDetail() {
             onClick={handleAddToCart}
             endIcon={<ShoppingCartIcon />}
           >
-            KÖP!!
+            Lägg i varukorgen
           </Button>
 
           <Button
@@ -127,8 +241,7 @@ function ProductDetail() {
           </Button>
         </Box>
 
-        <BasicRating />
-
+        <ProductRating productId={id} onRatingSuccess={handleRatingSuccess} />
         
       </Container>
 
@@ -148,7 +261,18 @@ function ProductDetail() {
       </Snackbar>
     </>
   ) : (
-    <Typography variant="h5">Kunde inte hämta produkt</Typography>
+    <Container maxWidth="lg">
+      <Typography variant="h5">Ingen produkt hittades</Typography>
+      <Button
+        variant="contained"
+        startIcon={<ChevronLeftIcon />}
+        onClick={() => navigate('/')}
+        sx={{ mt: 2 }}
+      >
+        Tillbaka till startsidan
+      </Button>
+    </Container>
   );
 }
+
 export default ProductDetail;

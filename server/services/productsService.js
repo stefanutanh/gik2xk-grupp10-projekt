@@ -21,13 +21,7 @@ async function getById(id) {
   try {
     const product = await db.product.findOne({
       where: { id },
-      include: [
-        db.user,
-        {
-          model: db.comment,
-          include: [db.user]
-        }
-      ]
+      include: [db.user]
     });
 
     if (!product) {
