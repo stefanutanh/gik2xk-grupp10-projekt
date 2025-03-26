@@ -68,14 +68,15 @@ db.user.hasMany(db.comment, { foreignKey: { allowNull: false }, onDelete: 'CASCA
 db.product.belongsToMany(db.tag, { through: db.productTag });
 db.tag.belongsToMany(db.product, { through: db.productTag });
 
-db.cart = require('./cart')(sequelize, Sequelize.DataTypes);
-db.cartRow = require('./cartRow')(sequelize, Sequelize.DataTypes);
-db.user.hasMany(db.cart);
-db.cart.belongsTo(db.user);
-db.cart.hasMany(db.cartRow);
-db.cartRow.belongsTo(db.cart);
-db.product.hasMany(db.cartRow);
-db.cartRow.belongsTo(db.product);
+// Associationer för varukorg
+db.cart.hasMany(db.cartRow, { foreignKey: 'cartId', as: 'cartRows' });
+db.cartRow.belongsTo(db.cart, { foreignKey: 'cartId' });
+
+db.product.hasMany(db.cartRow, { foreignKey: 'productId' });
+db.cartRow.belongsTo(db.product, { foreignKey: 'productId', as: 'product' });
+
+db.user.hasMany(db.cart, { foreignKey: 'userId' });
+db.cart.belongsTo(db.user, { foreignKey: 'userId' });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

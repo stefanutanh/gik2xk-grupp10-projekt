@@ -111,33 +111,9 @@ function Home() {
             </CardContent>
           </Card>
           
-          <Paper 
-            elevation={3} 
-            sx={{ 
-              p: 3, 
-              mb: 4, 
-              borderRadius: 2,
-              background: (theme) => `linear-gradient(to right, ${theme.palette.secondary.light}, ${theme.palette.secondary.main})`,
-            }}
-          >
-            <Typography 
-              variant="h2" 
-              sx={{ 
-                color: 'white', 
-                mb: 0,
-                fontSize: '1.8rem',
-                textShadow: '1px 1px 3px rgba(0,0,0,0.3)'
-              }}
-            >
-              Kategorier
-            </Typography>
-          </Paper>
+        
           
-          <Card sx={{ borderRadius: 2 }}>
-            <CardContent>
-              <TagList />
-            </CardContent>
-          </Card>
+          
         </Grid>
       </Grid>
     </Container>

@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import {
   Box,
   AppBar,
@@ -14,32 +14,74 @@ import {
   ListItemIcon,
   ListItemText,
   useMediaQuery,
-  useTheme
+  useTheme,
+  Popover
 } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import HomeIcon from '@mui/icons-material/Home';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import MenuIcon from '@mui/icons-material/Menu';
+import CartView from './components/CartView';
+import { getAll } from './services/CartService';
 
 function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [cartAnchorEl, setCartAnchorEl] = useState(null);
+  const [cartItemCount, setCartItemCount] = useState(0);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const navigate = useNavigate();
+
+  // Ladda antal varor i varukorgen
+  useEffect(() => {
+    loadCartCount();
+    
+    // Lägg till en timer för att uppdatera varukorgen med jämna mellanrum
+    const intervalId = setInterval(loadCartCount, 30000); // Var 30:e sekund
+    
+    return () => clearInterval(intervalId); // Rensa timern när komponenten avmonteras
+  }, []);
+
+  const loadCartCount = async () => {
+    try {
+      const items = await getAll();
+      if (items && Array.isArray(items)) {
+        setCartItemCount(items.length);
+      }
+    } catch (err) {
+      console.error("Fel vid hämtning av varukorg:", err);
+    }
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleCartClick = (event) => {
+    setCartAnchorEl(event.currentTarget);
+    loadCartCount(); // Uppdatera räknaren när varukorgen öppnas
+  };
+
+  const handleCartClose = () => {
+    setCartAnchorEl(null);
+  };
+
+  const openCartPage = () => {
+    handleCartClose();
+    navigate('/checkout');
+  };
+
+  const cartOpen = Boolean(cartAnchorEl);
+  const cartId = cartOpen ? 'cart-popover' : undefined;
+
   const navItems = [
     { text: 'Hem', icon: <HomeIcon />, path: '/' },
     { text: 'Skapa produkt', icon: <AddCircleIcon />, path: '/products/new' },
-    
   ];
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      
       <Drawer
         variant="temporary"
         open={mobileOpen}
@@ -59,6 +101,14 @@ function App() {
               <ListItemText primary={item.text} />
             </ListItem>
           ))}
+          <ListItem button onClick={handleCartClick}>
+            <ListItemIcon>
+              <Badge badgeContent={cartItemCount} color="error">
+                <ShoppingCartIcon />
+              </Badge>
+            </ListItemIcon>
+            <ListItemText primary="Varukorg" />
+          </ListItem>
         </List>
       </Drawer>
     </Box>
@@ -128,9 +178,11 @@ function App() {
             </Box>
 
             {/* Shopping Cart Icon */}
-            {/* <IconButton 
+            <IconButton 
               color="inherit" 
               aria-label="shopping cart"
+              aria-describedby={cartId}
+              onClick={handleCartClick}
               sx={{ 
                 ml: 2,
                 '&:hover': { 
@@ -139,14 +191,36 @@ function App() {
                 }
               }}
             >
-              <Badge badgeContent={0} color="error">
+              <Badge badgeContent={cartItemCount} color="error">
                 <ShoppingCartIcon />
               </Badge>
-            </IconButton> */}
+            </IconButton>
           </Toolbar>
         </AppBar>
         {drawer}
       </Box>
+      
+      {/* Cart Popover */}
+      <Popover
+        id={cartId}
+        open={cartOpen}
+        anchorEl={cartAnchorEl}
+        onClose={handleCartClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        sx={{ mt: 1 }}
+      >
+        <Box sx={{ width: 400, maxWidth: '100vw', p: 2 }}>
+          <CartView />
+        </Box>
+      </Popover>
+      
       <Container 
         sx={{ 
           mt: 4, 

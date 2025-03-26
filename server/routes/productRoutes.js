@@ -35,17 +35,8 @@ router.post('/', (req, res) => {
     });
 });
 
-// Uppdatera ett inlägg
-/* router.put('/', (req, res) => {
-    const post = req.body;
-    const id = post.id;
-    
-    postService.update(post, id).then((result) => {
-        res.status(result.status).json(result.data);
-    });
-}); */
-
-router.put('/:id', (req, res) => {  // Fixa denna rad så att den matchar utan '/products'
+// Uppdaterar
+router.put('/:id', (req, res) => {  
   console.log('Mottar PUT-förfrågan:', req.params.id);
   console.log('Produktdata:', req.body);
   const id = req.params.id;
@@ -59,9 +50,6 @@ router.put('/:id', (req, res) => {  // Fixa denna rad så att den matchar utan '
       res.status(500).json({ error: 'Ett fel inträffade vid uppdatering av produkten', details: err });
     });
 });
-
-
-
 
 
 // Ta bort en produkt

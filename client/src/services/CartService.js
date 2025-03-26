@@ -4,14 +4,15 @@ import axios from './api';
 export async function getAll() {
   try {
     const response = await axios.get('/cart');
-    if (response.status === 200) return response.data;
-    else {
+    if (response.status === 200) {
+      return extractData(response.data);
+    } else {
       console.log(response);
       return [];
     }
   } catch (e) {
     e?.response ? console.log(e.response.data) : console.log(e);
-    return []; // Lägg till denna rad för att säkerställa att funktionen alltid returnerar något
+    return []; // Returnera tom array istället för undefined
   }
 }
 
@@ -19,8 +20,9 @@ export async function getAll() {
 export async function getUserCart(userId) {
   try {
     const response = await axios.get(`/users/${userId}/getCart`);
-    if (response.status === 200) return response.data;
-    else {
+    if (response.status === 200) {
+      return extractData(response.data);
+    } else {
       console.log(response);
       return [];
     }
@@ -38,8 +40,9 @@ export async function addToCart(userId, productId, amount) {
       productId,
       amount
     });
-    if (response.status === 200) return response.data;
-    else {
+    if (response.status === 200) {
+      return extractData(response.data);
+    } else {
       console.log(response.data);
       return null;
     }
@@ -56,8 +59,9 @@ export async function updateCartItem(cartRowId, amount) {
       cartRowId,
       amount
     });
-    if (response.status === 200) return response.data;
-    else {
+    if (response.status === 200) {
+      return extractData(response.data);
+    } else {
       console.log(response.data);
       return null;
     }
@@ -73,8 +77,9 @@ export async function removeFromCart(cartRowId) {
     const response = await axios.delete('/cart/removeProduct', {
       data: { cartRowId }
     });
-    if (response.status === 200) return response.data;
-    else {
+    if (response.status === 200) {
+      return extractData(response.data);
+    } else {
       console.log(response.data);
       return null;
     }
@@ -90,8 +95,9 @@ export async function clearCart(cartId) {
     const response = await axios.delete('/cart', {
       data: { cartId }
     });
-    if (response.status === 200) return response.data;
-    else {
+    if (response.status === 200) {
+      return extractData(response.data);
+    } else {
       console.log(response.data);
       return null;
     }

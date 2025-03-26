@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(255)
     },
     price: {
-      type: DataTypes.DECIMAL(10, 2), 
+      type: DataTypes.DOUBLE, 
       allowNull: true
     }
   }, { underscored: true });
