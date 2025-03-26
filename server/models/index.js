@@ -42,31 +42,14 @@ Object.keys(db).forEach((modelName) => {
 
 console.log('Loaded models:', Object.keys(db));
 
-console.log('Loaded models with details:', Object.keys(db).map(key => 
-  `${key}: ${typeof db[key]}`
-));
 
-/* db.product.belongsTo(db.user, { foreignKey: { allowNull: false } });
-db.user.hasMany(db.product, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
-db.comment.belongsTo(db.product, { foreignKey: { allowNull: false } });
-db.product.hasMany(db.comment, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-
-db.comment.belongsTo(db.user, { foreignKey: { allowNull: false } });
-db.user.hasMany(db.comment, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' }); */
-
-/* db.product.belongsToMany(db.tag, { through: db.productTag });
-db.tag.belongsToMany(db.product, { through: db.productTag }); */
 
 
 db.product.belongsTo(db.user, { foreignKey: { allowNull: false } });
 db.user.hasMany(db.product, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-db.comment.belongsTo(db.product, { foreignKey: { allowNull: false } });
-db.product.hasMany(db.comment, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-db.comment.belongsTo(db.user, { foreignKey: { allowNull: false } });
-db.user.hasMany(db.comment, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-db.product.belongsToMany(db.tag, { through: db.productTag });
-db.tag.belongsToMany(db.product, { through: db.productTag });
+
+
 
 // Associationer för varukorg
 db.cart.hasMany(db.cartRow, { foreignKey: 'cartId', as: 'cartRows' });

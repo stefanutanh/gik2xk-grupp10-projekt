@@ -1,6 +1,5 @@
 import ProductItemLarge from '../components/ProductItemLarge';
-import CommentForm from '../components/CommentForm';
-import Comment from '../components/comment';
+
 import { Alert, Box, Button, Container, List, Typography, Snackbar } from '@mui/material';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -81,18 +80,7 @@ function ProductDetail() {
       });
   }, [id]);
 
-  function onCommentAdd(comment) {
-    addComment(product.id, comment)
-      .then(() => getOne(id))
-      .then((product) => setProduct(product))
-      .catch((error) => {
-        console.error("Fel vid att lägga till kommentar:", error);
-      });
-  }
 
-  function clearMessage() {
-    window.history.replaceState({}, '');
-  }
 
   return product ? (
     <>

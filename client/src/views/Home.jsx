@@ -1,6 +1,5 @@
 import { useLocation } from 'react-router-dom';
 import ProductList from '../components/ProductList';
-import TagList from '../components/TagList';
 import CartView from '../components/CartView';
 import { 
   Alert, 

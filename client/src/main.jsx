@@ -130,19 +130,11 @@ const router = createBrowserRouter([
         path: '/users/:id/Products',
         element: <Products />
       },
-      {
-        path: '/tags/:tag/Products',
-        element: <Products />
-      }
+      
     ]
   }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <RouterProvider router={router} />
-    </ThemeProvider>
-  </React.StrictMode>
+	<React.StrictMode>{<RouterProvider router={router} />}</React.StrictMode>
 );

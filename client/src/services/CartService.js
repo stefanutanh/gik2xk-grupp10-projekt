@@ -1,7 +1,7 @@
 import axios from './api';
 
 // Hämta hela varukorgen
-export async function getAll() {
+/* export async function getAll() {
   try {
     const response = await axios.get('/cart');
     if (response.status === 200) {
@@ -14,8 +14,20 @@ export async function getAll() {
     e?.response ? console.log(e.response.data) : console.log(e);
     return []; // Returnera tom array istället för undefined
   }
-}
+} */
+  export async function getAll(endpoint = '/cart') {
+    try {
+        const response = await axios.get(endpoint);
 
+        if(response.status === 200) return response.data;
+        else {
+            console.log(response);
+            return [];
+        }
+    } catch(e) {
+        e?.response ? console.log(e.response.data) : console.log(e);
+    }
+}
 // Hämta en specifik användares varukorg
 export async function getUserCart(userId) {
   try {

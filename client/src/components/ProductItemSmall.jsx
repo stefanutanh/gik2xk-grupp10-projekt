@@ -1,4 +1,3 @@
-/*Denna komponent kommer visa lite mindre information om produkten*/
 import React from "react";
 import { Box, Card, CardMedia, CardContent, Typography, IconButton, Button } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -11,7 +10,6 @@ function ProductItemSmall({ product }) {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    // Navigera till detaljsidan för produkten
     navigate(`/products/${product.id}`);
   };
 

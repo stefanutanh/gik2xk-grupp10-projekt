@@ -9,7 +9,7 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import TagField from '../components/TagField';
+
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
@@ -40,9 +40,7 @@ function ProductEdit() {
 
   function onChange(e) {
     const name = e.target.name;
-    /* const value = e.target.value; */
     const value = name === 'price' ? parseFloat(e.target.value) : e.target.value;
-
     const newproduct = { ...product, [name]: value };
     setProduct(newproduct);
   }
@@ -70,26 +68,7 @@ function ProductEdit() {
     );
   }
 
-  function onTagAdd(tagString) {
-    //splitta arrayen vid kommatecken
-    const tagArray = tagString.split(',');
-    //trimma whitespace runt taggar
-    const uniqueAndTrimmedTags = tagArray
-      .map((tag) => tag.trim())
-      .filter((tag) => !product.tags.includes(tag));
 
-    //slå samman befintlig tag-array med de nya, unika taggarna
-    const mergedArray = [...product.tags, ...uniqueAndTrimmedTags];
-
-    //spara befintligt inlägg med nya tags-arrayen till state.
-    setProduct({ ...product, tags: mergedArray });
-  }
-
-  function onTagDelete(tagToDelete) {
-    const newTags = product.tags.filter((tag) => tag !== tagToDelete);
-
-    setProduct({ ...product, tags: newTags });
-  }
   return (
     <Container maxWidth="lg">
       <Typography variant="h4" component="h2">
@@ -145,20 +124,8 @@ function ProductEdit() {
               label="Sökväg till bild"
             />
           </Box>
-          <Box mt={1}>
-            {product?.tags?.length > 0 &&
-              product.tags.map((tag) => (
-                <Chip
-                  sx={{ mr: 1 }}
-                  onDelete={() => onTagDelete(tag)}
-                  key={tag}
-                  label={tag}
-                />
-              ))}
-          </Box>
-          <Box mt={2}>
-            <TagField onSave={onTagAdd} />
-          </Box>
+          
+          
           <Box display="flex" mt={2}>
             <Box flexGrow={1}>
               <Button

@@ -1,38 +1,83 @@
 /* npx sequelize-cli db:create */
-
 USE webshop;
 
--- Skapa users-tabell med korrekta kolumner och datatyper
-CREATE TABLE IF NOT EXISTS users (
+-- Temporärt inaktivera foreign key constraints
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Ta bort tabeller i rätt ordning
+DROP TABLE IF EXISTS cart_row;
+DROP TABLE IF EXISTS cart;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS users;
+
+-- Återaktivera foreign key constraints
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- Skapa users-tabell
+CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
   first_name VARCHAR(255),
   last_name VARCHAR(255),
   image_url VARCHAR(255),
-  created_at DATETIME,
-  updated_at DATETIME
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Skapa products-tabell med korrekta kolumner och datatyper
-CREATE TABLE IF NOT EXISTS products (
+-- Skapa products-tabell
+CREATE TABLE products (
   id INT AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
   description TEXT,
-  price DECIMAL(10, 2),
+  price DECIMAL(10,2),
   image_url VARCHAR(255),
-  created_at DATETIME,
-  updated_at DATETIME
+  user_id INT DEFAULT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+);
+
+-- Skapa cart-tabell
+CREATE TABLE cart (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  completed BOOLEAN DEFAULT false,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Skapa cart_row-tabell
+CREATE TABLE cart_row (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  cart_id INT NOT NULL,
+  product_id INT NOT NULL,
+  amount INT NOT NULL DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (cart_id) REFERENCES cart(id) ON DELETE CASCADE,
+  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
 -- Lägg till användare
-INSERT INTO users (username, email, first_name, last_name, image_url, created_at, updated_at)
+INSERT INTO users (username, email, first_name, last_name, image_url)
 VALUES 
-  ("mikaela", "mie@du.se", "Mikaela", "Hedberg", "https://mikaela.plandigital.se/common/images/mie.jpg", '2022-11-17 22:42:14', '2022-11-17 00:00:00'),
-  ("yoshi", "yoshi@du.se", "Yoshi", "Akterkvist", "https://mikaela.plandigital.se/common/images/yoshi.jpg", '2022-11-17 22:42:14', '2022-11-17 00:00:00'),
-  ("princess", "leia@du.se", "Leia", "Skywalker", "https://mikaela.plandigital.se/common/images/leia.jpg", '2022-11-17 22:42:14', '2022-11-17 00:00:00');
+  ("user1", "maile@du.se", "Förnamn1", "Efternamn1", ""),
+  ("user2", "maile@du.se", "Förnamn2", "Efternamn2", "");
 
--- Lägg till produkt
-INSERT INTO products (title, description, price, image_url, created_at, updated_at)
-VALUES
-  ('Samsung mikrovågsugn MS23K3515AW', 'Samsung MS23K3515AW är en perfekt mikrovågsugn när du snabbt och smidigt vill tina, laga eller värma upp mat. Tack vare deodorisation och den keramiskt emaljerade interiören förhindras överföring av obehagliga lukter eller dofter på övriga livsmedel. Denna eleganta och moderna mikrovågsugn kommer i en vit färg med svart lucka. Mikrovågsugnen har en kapacitet på 23 liter och kommer med en 28,8 cm stor roterande tallrik. Välj mellan 6 effektnivåer och användbara program såsom Auto Cook, Quick Defrost eller Soften/Melt. Tack vare Quick Defrost-funktionen tinar maten snabbt och jämnt, samtidigt som den behåller en perfekt konsistens. Deodorisation-funktionen blåser ut och avlägsnar oönskade lukter inuti mikrovågsugnen. Minska energiförbrukningen med den smarta Eco Mode-funktionen. Tack vare den keramiskt emaljerade interiören är din mikrovågsugn reptålig. Den förhindrar även överföring av obehagliga lukter eller dofter på övriga livsmedel.', 1599.99, 'https://www.elgiganten.se/image/dv_web_D180001002214705/MS23K3515AW/samsung-mikrovagsugn-ms23k3515aw--pdp_zoom-3000--pdp_main-960.jp', '2022-01-01 22:42:14', '2022-01-01 22:42:14');
+-- Lägg till produkter
+INSERT INTO products (title, description, price, image_url, user_id)
+VALUES 
+  ("Produkt1", "Beskrivning av produkt 1", 99.00, "https://example.com/image1.jpg", 1),
+  ("Produkt2", "Beskrivning av produkt 2", 199.00, "https://example.com/image2.jpg", 2);
+
+-- Lägg till varukorg för user1
+INSERT INTO cart (user_id, completed)
+VALUES (1, false);
+
+-- Lägg till produkter i varukorgen
+INSERT INTO cart_row (cart_id, product_id, amount)
+VALUES 
+  (1, 1, 2),
+  (1, 2, 1);

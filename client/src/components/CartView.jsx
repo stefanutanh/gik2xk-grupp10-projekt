@@ -31,7 +31,7 @@ function CartView() {
     severity: 'success'
   });
 
-  // Ladda varukorgen vid komponentmontering
+ /*  // Ladda varukorgen vid komponentmontering
   useEffect(() => {
     loadCart();
   }, []);
@@ -82,7 +82,7 @@ function CartView() {
     } finally {
       setLoading(false);
     }
-  };
+  }; */
 
   // Beräkna totalt pris
   const calculateTotal = (items) => {
@@ -182,16 +182,7 @@ function CartView() {
     }));
   };
 
-  // Visa laddningsindikator
-  if (loading && (!cartItems || cartItems.length === 0)) {
-    return (
-      <Box sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
-        <CircularProgress size={30} />
-      </Box>
-    );
-  }
-
-  // Visa felmeddelande
+   // Visa felmeddelande
   if (error) {
     return (
       <Paper sx={{ p: 2, bgcolor: 'error.light', color: 'error.contrastText' }}>
@@ -213,15 +204,7 @@ function CartView() {
       <Box sx={{ p: 2, textAlign: 'center' }}>
         <ShoppingCartIcon sx={{ fontSize: 60, color: 'text.secondary', mb: 2 }} />
         <Typography variant="body1" gutterBottom>Din varukorg är tom</Typography>
-        <Button 
-          component="a" 
-          href="/" 
-          variant="contained" 
-          color="primary" 
-          sx={{ mt: 2 }}
-        >
-          Fortsätt handla
-        </Button>
+        
       </Box>
     );
   }

@@ -6,7 +6,7 @@ import {
   Paper,
   Typography
 } from '@mui/material';
-import Tag from './Tag';
+
 import placeholderImage from '../assets/productpictures/placeholder.png';
 
 function ProductItemLarge({ product }) {
@@ -20,11 +20,7 @@ function ProductItemLarge({ product }) {
       </Box>
       <Card elevation={0}>
         <CardMedia component="img" image={product.imageUrl || placeholderImage} />
-        <CardContent>
-          {product.tags &&
-            product.tags.map((tag) => <Tag key={`tag_${tag}`} text={tag} />)}
-          <Typography variant="body2">{product.body}</Typography>
-        </CardContent>
+      
       </Card>
     </Paper>
   );
