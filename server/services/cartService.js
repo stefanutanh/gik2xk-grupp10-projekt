@@ -214,11 +214,11 @@ async function getAllCarts() {
       ]
     });
     
-    console.log(`Retrieved ${carts.length} carts with details:`, 
-                JSON.stringify(carts, null, 2));
+   /*  console.log(`Retrieved ${carts.length} carts with details:`, 
+                JSON.stringify(carts, null, 2)); */
     
     return carts;
-  } catch (error) {
+  } catch (error) { 
     console.error('Error in getAllCarts:', error);
     throw error;
   }

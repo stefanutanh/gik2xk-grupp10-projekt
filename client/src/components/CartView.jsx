@@ -34,15 +34,15 @@ function CartView() {
   const loadCart = async () => {
     setLoading(true);
     try {
-      const items = await getAll();
-      // Säkerställ att vi hanterar både null och undefined samt andra oförväntade värden
-      if (items && Array.isArray(items)) {
-        setCartItems(items);
-        calculateTotal(items);
-      } else {
-        setCartItems([]);
-        setTotalPrice(0);
-      }
+      const response = await getAll();
+      console.log("Cart response:", response); 
+  
+      const items = response.data && Array.isArray(response.data) 
+        ? response.data 
+        : (Array.isArray(response) ? response : []);
+      
+      setCartItems(items);
+      calculateTotal(items);
       setError(null);
     } catch (err) {
       console.error("Fel vid hämtning av varukorg:", err);

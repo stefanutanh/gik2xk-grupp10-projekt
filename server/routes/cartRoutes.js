@@ -81,8 +81,8 @@ router.delete('/', async (req, res) => {
 router.get('/user/:userId', async (req, res) => {
   try {
     const userId = req.params.userId;
-    const cartItems = await cartService.getUserCart(userId);
-    res.json(createResponseSuccess(cartItems));
+    const result = await cartService.getUserCart(userId);
+    res.json(result.data); // Make sure you're sending result.data
   } catch (error) {
     console.error('Error handling GET /cart/user/:userId:', error);
     res.status(500).json(createResponseError(error.message));

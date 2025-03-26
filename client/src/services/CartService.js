@@ -8,23 +8,38 @@ function extractData(response) {
 export async function getAll(endpoint = '/cart') {
   try {
     const response = await axios.get(endpoint);
-    if (response.status === 200) return response.data;
-    else {
+    console.log("Raw cart response:", response.data); // Add this logging
+    
+    if (response.status === 200) {
+      // Check if the data is nested within a 'data' property
+      if (response.data && response.data.data) {
+        return response.data.data;
+      }
+      return response.data;
+    } else {
       console.log('Oväntat svar från server:', response);
       return [];
     }
   } catch (e) {
     console.error('Fel vid hämtning av varukorg:', e?.response?.data || e.message || e);
-    return []; // Returnera tom array istället för undefined
+    return [];
   }
 }
 
 // Hämta användarens varukorg
 export async function getCart(userId) {
   try {
-    const response = await axios.get(`/users/${userId}/getCart`);
-    if (response.status === 200) return response.data;
-    else {
+    // Try the user-specific endpoint
+    const response = await axios.get(`/cart/user/${userId}`);
+    console.log(`Cart for user ${userId}:`, response.data);
+    
+    if (response.status === 200) {
+      // Handle the potential nested data structure
+      if (response.data && response.data.data) {
+        return response.data.data;
+      }
+      return response.data;
+    } else {
       console.log('Oväntat svar från server:', response);
       return [];
     }
@@ -37,11 +52,15 @@ export async function getCart(userId) {
 // Lägg till produkt i varukorgen
 export async function addToCart(userId, productId, amount) {
   try {
+    console.log(`Adding to cart: User ${userId}, Product ${productId}, Amount ${amount}`);
     const response = await axios.post('/cart/addProduct', {
       userId,
       productId,
       amount
     });
+    
+    console.log("Add to cart response:", response.data);
+    
     if (response.status === 200) return response.data;
     else {
       console.log('Oväntat svar från server:', response);

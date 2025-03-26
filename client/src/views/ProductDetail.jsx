@@ -51,10 +51,10 @@ function ProductRating({ productId, onRatingSuccess }) {
           userId: 1 // Hårdkodad användare för enkelhetens skull
         });
         
-        if (response.data) {
+        if (response.data && response.data.data) {
           // Uppdatera genomsnittsbetyg och räknare
-          setAverageRating(response.data.averageRating || averageRating);
-          setRatingCount(ratingCount + 1);
+          setAverageRating(response.data.data.averageRating || 0);
+  setRatingCount(response.data.data.count || 0);
           setError(null);
           if (onRatingSuccess) {
             onRatingSuccess("Tack för ditt betyg!");

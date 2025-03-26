@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const productsService = require('../services/productsService');
+const ratingService = require('../services/ratingService'); // Importera ratingService
 const { createResponseSuccess, createResponseError } = require('../helpers/responseHelper');
 
 // Hämta alla produkter
@@ -74,6 +75,19 @@ router.get('/:id/ratings', async (req, res) => {
     res.status(result.status).json(result.data);
   } catch (error) {
     console.error('Error in GET /products/:id/ratings:', error);
+    res.status(500).json(createResponseError(error.message));
+  }
+});
+
+// Lägg till rating för en produkt
+router.post('/:id/addRating', async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const userId = req.body.userId || 1; // Default till user 1 om inget userId anges
+    const result = await ratingService.addRating(req.body, productId, userId);
+    res.status(result.status).json(result.data);
+  } catch (error) {
+    console.error('Error in POST /products/:id/addRating:', error);
     res.status(500).json(createResponseError(error.message));
   }
 });
