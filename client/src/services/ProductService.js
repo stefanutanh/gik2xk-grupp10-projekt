@@ -78,18 +78,5 @@ export async function remove(id) {
   }
 }
 
-export async function addComment(productId, comment) {
-  try {
-    const response = await axios.post(`/products/${productId}/addComment`, comment); // Ändrat från product till product
-    if (response.status === 200) return response.data;
-    else {
-      console.log(response.data); 
-      return null;
-    }
-  } catch (e) {
-    e?.response ? console.log(e.response.data) : console.log(e);
-    return null; 
-  }
-}
 
 

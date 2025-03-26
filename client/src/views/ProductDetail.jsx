@@ -3,7 +3,7 @@ import ProductItemLarge from '../components/ProductItemLarge';
 import { Alert, Box, Button, Container, List, Typography, Snackbar } from '@mui/material';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { addComment, getOne } from '../services/ProductService';
+import {  getOne } from '../services/ProductService';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import EditIcon from '@mui/icons-material/Edit';
 import Rating from '@mui/material/Rating';
@@ -129,17 +129,7 @@ function ProductDetail() {
 
         <BasicRating />
 
-        <Box>
-          <Typography variant="h3">Kommentarer</Typography>
-          <CommentForm onSave={onCommentAdd} />
-          {product.comments && (
-            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-              {product.comments.map((comment, i) => (
-                <Comment key={`comment_${i}`} comment={comment} />
-              ))}
-            </List>
-          )}
-        </Box>
+        
       </Container>
 
       <Snackbar

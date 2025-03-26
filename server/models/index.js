@@ -46,18 +46,33 @@ console.log('Loaded models:', Object.keys(db));
 
 
 // Associationer 
+// Produkt - Användare
 db.product.belongsTo(db.user, { foreignKey: 'userId', allowNull: false });
 db.user.hasMany(db.product, { foreignKey: 'userId', allowNull: false, onDelete: 'CASCADE' });
 
+// Varukorg - VarukorgRad
 db.cart.hasMany(db.cartRow, { foreignKey: 'cartId', as: 'cartRows' });
 db.cartRow.belongsTo(db.cart, { as: 'cart', foreignKey: 'cartId' });
 
+// VarukorgRad - Produkt
 db.cartRow.belongsTo(db.product, { as: 'product', foreignKey: 'productId' });
 db.product.hasMany(db.cartRow, { as: 'cartRows', foreignKey: 'productId' });
 
-
+// Användare - Varukorg
 db.user.hasMany(db.cart, { foreignKey: 'userId' });
 db.cart.belongsTo(db.user, { foreignKey: 'userId' });
+
+
+/* // Rating associationer (om rating-modellen finns)
+if (db.rating) {
+  // Rating - Produkt
+  db.rating.belongsTo(db.product, { foreignKey: 'productId' });
+  db.product.hasMany(db.rating, { foreignKey: 'productId' });
+  
+  // Rating - Användare (om vi vill spåra vem som gav betyget)
+  db.rating.belongsTo(db.user, { foreignKey: 'userId' });
+  db.user.hasMany(db.rating, { foreignKey: 'userId' });
+} */
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
