@@ -11,7 +11,7 @@
     "express": "^4.21.2",
     "mariadb": "^3.4.0",
     "morgan": "~1.9.1",
-    "mysql2": "^3.13.0",
+    "mysql2": "^3.14.0",
     "sequelize": "^6.37.6",
     "validate.js": "^0.13.1"
   }
