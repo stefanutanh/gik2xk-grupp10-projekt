@@ -8,11 +8,45 @@ const {
 
 const router = express.Router();
 
+// GET /cart - Get all carts or user's cart if userId is provided
+router.get('/', async (req, res) => {
+  try {
+    // If a userId exists in query params, get only their cart
+    const userId = req.query.userId;
+    
+    let result;
+    if (userId) {
+      result = await cartService.getUserCart(userId);
+    } else {
+      // Otherwise get all carts (for admins)
+      result = await cartService.getAllCarts();
+    }
+    
+    res.json(createResponseSuccess(result));
+  } catch (error) {
+    console.error('Error handling GET /cart:', error);
+    res.status(500).json(createResponseError(error.message));
+  }
+});
 
-// POST /cart/addProduct - Lägg till produkt i varukorg
+// GET /cart/user/:userId - Get cart for specific user
+router.get('/user/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    console.log(`Getting cart for user: ${userId}`);
+    const result = await cartService.getUserCart(userId);
+    res.json(createResponseSuccess(result));
+  } catch (error) {
+    console.error('Error handling GET /cart/user/:userId:', error);
+    res.status(500).json(createResponseError(error.message));
+  }
+});
+
+// POST /cart/addProduct - Add product to cart
 router.post('/addProduct', async (req, res) => {
   try {
     const { userId, productId, amount } = req.body;
+    console.log(`Adding product: userId=${userId}, productId=${productId}, amount=${amount}`);
     
     if (!userId || !productId || !amount) {
       return res.status(400).json(createResponseError('userId, productId, and amount are required'));
@@ -26,12 +60,13 @@ router.post('/addProduct', async (req, res) => {
   }
 });
 
-// PUT /cart/updateProduct - Uppdatera produktantal i varukorg
+// PUT /cart/updateProduct - Update product quantity in cart
 router.put('/updateProduct', async (req, res) => {
   try {
     const { cartRowId, amount } = req.body;
+    console.log(`Updating product: cartRowId=${cartRowId}, amount=${amount}`);
     
-    if (!cartRowId || !amount) {
+    if (!cartRowId || amount === undefined) {
       return res.status(400).json(createResponseError('cartRowId and amount are required'));
     }
     
@@ -43,10 +78,11 @@ router.put('/updateProduct', async (req, res) => {
   }
 });
 
-// DELETE /cart/removeProduct - Ta bort produkt från varukorg
+// DELETE /cart/removeProduct - Remove product from cart
 router.delete('/removeProduct', async (req, res) => {
   try {
     const { cartRowId } = req.body;
+    console.log(`Removing product: cartRowId=${cartRowId}`);
     
     if (!cartRowId) {
       return res.status(400).json(createResponseError('cartRowId is required'));
@@ -60,10 +96,11 @@ router.delete('/removeProduct', async (req, res) => {
   }
 });
 
-// DELETE /cart - Töm hela varukorgen
+// DELETE /cart - Clear entire cart
 router.delete('/', async (req, res) => {
   try {
     const { cartId } = req.body;
+    console.log(`Clearing cart: ${cartId}`);
     
     if (!cartId) {
       return res.status(400).json(createResponseError('cartId is required'));
@@ -77,37 +114,82 @@ router.delete('/', async (req, res) => {
   }
 });
 
-// Kompletterande route för att hämta användarens varukorg
-router.get('/user/:userId', async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const result = await cartService.getUserCart(userId);
-    res.json(result.data); // Make sure you're sending result.data
-  } catch (error) {
-    console.error('Error handling GET /cart/user/:userId:', error);
-    res.status(500).json(createResponseError(error.message));
-  }
-});
+// New routes for convenience functions
 
-router.get('/', async (req, res) => {
+// POST /cart/reduceAmount - Decrease product quantity by 1
+router.post('/reduceAmount', async (req, res) => {
   try {
-    // Om ett userId finns i query params, hämta bara deras varukorg
-    const userId = req.query.userId;
+    const { userId, productId } = req.body;
     
-    let carts;
-    if (userId) {
-      carts = await cartService.getUserCart(userId);
-    } else {
-      // Annars hämta alla varukorgar (för admins)
-      carts = await cartService.getAllCarts();
+    if (!userId || !productId) {
+      return res.status(400).json(createResponseError('userId and productId are required'));
     }
     
-    res.json(createResponseSuccess(carts));
+    // Find the cart
+    const cart = await cartService.getOrCreateCart(userId);
+    
+    // Find the cart row
+    const cartRow = await db.cartRow.findOne({
+      where: {
+        cartId: cart.id,
+        productId: productId
+      }
+    });
+    
+    if (!cartRow) {
+      return res.status(404).json(createResponseError('Product not found in cart'));
+    }
+    
+    // Decrease amount or remove if amount becomes 0
+    if (cartRow.amount <= 1) {
+      await cartService.removeFromCart(cartRow.id);
+      return res.json(createResponseSuccess({ removed: true }));
+    } else {
+      cartRow.amount -= 1;
+      await cartRow.save();
+      return res.json(createResponseSuccess(cartRow));
+    }
   } catch (error) {
-    console.error('Error handling GET /cart:', error);
+    console.error('Error handling POST /cart/reduceAmount:', error);
     res.status(500).json(createResponseError(error.message));
   }
 });
 
+// POST /cart/increaseAmount - Increase product quantity by 1
+router.post('/increaseAmount', async (req, res) => {
+  try {
+    const { userId, productId } = req.body;
+    
+    if (!userId || !productId) {
+      return res.status(400).json(createResponseError('userId and productId are required'));
+    }
+    
+    // Find the cart
+    const cart = await cartService.getOrCreateCart(userId);
+    
+    // Find the cart row
+    const cartRow = await db.cartRow.findOne({
+      where: {
+        cartId: cart.id,
+        productId: productId
+      }
+    });
+    
+    if (!cartRow) {
+      // If not in cart, add it with amount 1
+      return res.json(createResponseSuccess(
+        await cartService.addToCart(userId, productId, 1)
+      ));
+    } else {
+      // Otherwise increase amount
+      cartRow.amount += 1;
+      await cartRow.save();
+      return res.json(createResponseSuccess(cartRow));
+    }
+  } catch (error) {
+    console.error('Error handling POST /cart/increaseAmount:', error);
+    res.status(500).json(createResponseError(error.message));
+  }
+});
 
 module.exports = router;

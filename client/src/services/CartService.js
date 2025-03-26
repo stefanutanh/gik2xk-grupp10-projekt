@@ -2,24 +2,27 @@ import axios from './api';
 
 // Hjälpfunktion för att hantera data från servern
 function extractData(response) {
-  return response && response.data ? response.data : response;
+  if (response && response.data) {
+    // If data is nested inside a data property
+    if (response.data.data) {
+      return response.data.data;
+    }
+    // Otherwise just return the data
+    return response.data;
+  }
+  return response;
 }
 
 export async function getAll(endpoint = '/cart') {
   try {
     const response = await axios.get(endpoint);
-    console.log("Raw cart response:", response.data); // Add this logging
+    console.log("Raw cart response:", response.data);
     
-    if (response.status === 200) {
-      // Check if the data is nested within a 'data' property
-      if (response.data && response.data.data) {
-        return response.data.data;
-      }
-      return response.data;
-    } else {
-      console.log('Oväntat svar från server:', response);
-      return [];
-    }
+    // Extract the data properly
+    const data = extractData(response);
+    
+    // Make sure we return an array, even if empty
+    return Array.isArray(data) ? data : [];
   } catch (e) {
     console.error('Fel vid hämtning av varukorg:', e?.response?.data || e.message || e);
     return [];
@@ -33,16 +36,11 @@ export async function getCart(userId) {
     const response = await axios.get(`/cart/user/${userId}`);
     console.log(`Cart for user ${userId}:`, response.data);
     
-    if (response.status === 200) {
-      // Handle the potential nested data structure
-      if (response.data && response.data.data) {
-        return response.data.data;
-      }
-      return response.data;
-    } else {
-      console.log('Oväntat svar från server:', response);
-      return [];
-    }
+    // Extract the data properly
+    const data = extractData(response);
+    
+    // Make sure we return an array, even if empty
+    return Array.isArray(data) ? data : [];
   } catch (e) {
     console.error('Fel vid hämtning av varukorg:', e?.response?.data || e.message || e);
     return [];
@@ -60,12 +58,7 @@ export async function addToCart(userId, productId, amount) {
     });
     
     console.log("Add to cart response:", response.data);
-    
-    if (response.status === 200) return response.data;
-    else {
-      console.log('Oväntat svar från server:', response);
-      return null;
-    }
+    return extractData(response);
   } catch (e) {
     console.error('Fel vid tillägg i varukorg:', e?.response?.data || e.message || e);
     return null;
@@ -75,15 +68,12 @@ export async function addToCart(userId, productId, amount) {
 // Uppdatera antal av en produkt i varukorgen
 export async function updateCartItem(cartRowId, amount) {
   try {
+    console.log(`Updating cart item: Row ${cartRowId}, Amount ${amount}`);
     const response = await axios.put('/cart/updateProduct', {
       cartRowId,
       amount
     });
-    if (response.status === 200) return response.data;
-    else {
-      console.log('Oväntat svar från server:', response);
-      return null;
-    }
+    return extractData(response);
   } catch (e) {
     console.error('Fel vid uppdatering av varukorg:', e?.response?.data || e.message || e);
     return null;
@@ -93,14 +83,11 @@ export async function updateCartItem(cartRowId, amount) {
 // Ta bort en produkt från varukorgen
 export async function removeFromCart(cartRowId) {
   try {
+    console.log(`Removing item from cart: Row ${cartRowId}`);
     const response = await axios.delete('/cart/removeProduct', {
       data: { cartRowId }
     });
-    if (response.status === 200) return response.data;
-    else {
-      console.log('Oväntat svar från server:', response);
-      return null;
-    }
+    return extractData(response);
   } catch (e) {
     console.error('Fel vid borttagning av produkt:', e?.response?.data || e.message || e);
     return null;
@@ -110,14 +97,11 @@ export async function removeFromCart(cartRowId) {
 // Töm hela varukorgen
 export async function clearCart(cartId) {
   try {
+    console.log(`Clearing cart: ${cartId}`);
     const response = await axios.delete('/cart', {
       data: { cartId }
     });
-    if (response.status === 200) return response.data;
-    else {
-      console.log('Oväntat svar från server:', response);
-      return null;
-    }
+    return extractData(response);
   } catch (e) {
     console.error('Fel vid tömning av varukorg:', e?.response?.data || e.message || e);
     return null;
@@ -131,11 +115,7 @@ export async function reduceAmount(userId, productId) {
       userId,
       productId
     });
-    if (response.status === 200) return response.data;
-    else {
-      console.log('Oväntat svar från server:', response);
-      return null;
-    }
+    return extractData(response);
   } catch (e) {
     console.error('Fel vid minskning av antal:', e?.response?.data || e.message || e);
     return null;
@@ -149,11 +129,7 @@ export async function increaseAmount(userId, productId) {
       userId,
       productId
     });
-    if (response.status === 200) return response.data;
-    else {
-      console.log('Oväntat svar från server:', response);
-      return null;
-    }
+    return extractData(response);
   } catch (e) {
     console.error('Fel vid ökning av antal:', e?.response?.data || e.message || e);
     return null;

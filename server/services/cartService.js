@@ -69,18 +69,9 @@ async function addToCart(userId, productId, amount) {
     console.log(`Adding product ${productId} to cart for user ${userId}, amount: ${amount}`);
     
     // Hitta eller skapa en aktiv varukorg för användaren
-    const [cart, created] = await db.cart.findOrCreate({
-      where: {
-        userId: userId,
-        completed: false
-      },
-      defaults: {
-        userId: userId,
-        completed: false
-      }
-    });
+    const cart = await getOrCreateCart(userId);
     
-    console.log(`${created ? 'Created new' : 'Found existing'} cart with ID: ${cart.id}`);
+    console.log(`Cart ID: ${cart.id}`);
 
     // Kolla om produkten redan finns i varukorgen
     const existingCartRow = await db.cartRow.findOne({
@@ -121,10 +112,12 @@ async function addToCart(userId, productId, amount) {
     throw error;
   }
 }
+
 // Uppdatera antal för en produkt i varukorgen
 async function updateCartItem(cartRowId, amount) {
   try {
-    const cartRow = await cartRow.findByPk(cartRowId);
+    // FIX: Use db.cartRow instead of cartRow
+    const cartRow = await db.cartRow.findByPk(cartRowId);
     
     if (!cartRow) {
       throw new Error('cartRow not found');
@@ -135,7 +128,7 @@ async function updateCartItem(cartRowId, amount) {
 
     return cartRow;
   } catch (error) {
-    console.error('Error in updatecartItem:', error);
+    console.error('Error in updateCartItem:', error);
     throw error;
   }
 }
@@ -143,7 +136,8 @@ async function updateCartItem(cartRowId, amount) {
 // Ta bort en produkt från varukorgen
 async function removeFromCart(cartRowId) {
   try {
-    const cartRow = await cartRow.findByPk(cartRowId);
+    // FIX: Use db.cartRow instead of cartRow
+    const cartRow = await db.cartRow.findByPk(cartRowId);
     
     if (!cartRow) {
       throw new Error('cartRow not found');
@@ -153,7 +147,7 @@ async function removeFromCart(cartRowId) {
     
     return { success: true, message: 'Item removed from cart' };
   } catch (error) {
-    console.error('Error in removeFromcart:', error);
+    console.error('Error in removeFromCart:', error);
     throw error;
   }
 }
@@ -161,16 +155,16 @@ async function removeFromCart(cartRowId) {
 // Töm en hel varukorg
 async function clearCart(cartId) {
   try {
-    // Ta bort alla rader som tillhör varukorgen
-    await cartRow.destroy({
+    // FIX: Use db.cartRow instead of cartRow
+    await db.cartRow.destroy({
       where: {
         cartId: cartId
       }
     });
 
-    return { success: true, message: 'cart cleared successfully' };
+    return { success: true, message: 'Cart cleared successfully' };
   } catch (error) {
-    console.error('Error in clearcart:', error);
+    console.error('Error in clearCart:', error);
     throw error;
   }
 }
@@ -178,10 +172,11 @@ async function clearCart(cartId) {
 // Markera varukorgen som köpt/genomförd
 async function completeCart(cartId) {
   try {
-    const cart = await cart.findByPk(cartId);
+    // FIX: Use db.cart instead of cart
+    const cart = await db.cart.findByPk(cartId);
     
     if (!cart) {
-      throw new Error('cart not found');
+      throw new Error('Cart not found');
     }
 
     cart.completed = true;
@@ -189,10 +184,11 @@ async function completeCart(cartId) {
 
     return cart;
   } catch (error) {
-    console.error('Error in completecart:', error);
+    console.error('Error in completeCart:', error);
     throw error;
   }
 }
+
 async function getAllCarts() {
   try {
     // Först kolla om det finns några varukorgar
@@ -214,16 +210,12 @@ async function getAllCarts() {
       ]
     });
     
-   /*  console.log(`Retrieved ${carts.length} carts with details:`, 
-                JSON.stringify(carts, null, 2)); */
-    
     return carts;
   } catch (error) { 
     console.error('Error in getAllCarts:', error);
     throw error;
   }
 }
-
 
 // Exportera alla funktioner
 module.exports = {

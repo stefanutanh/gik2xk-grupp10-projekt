@@ -18,7 +18,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { getAll, removeFromCart, updateCartItem, clearCart } from '../services/CartService';
+import { getAll, getCart, removeFromCart, updateCartItem, clearCart } from '../services/CartService';
 
 function CartView() {
   const [cartItems, setCartItems] = useState([]);
@@ -31,27 +31,34 @@ function CartView() {
     severity: 'success'
   });
 
+  // Default user ID (normally would come from authentication)
+  const userId = 1;
+
   const loadCart = async () => {
     setLoading(true);
     try {
-      const response = await getAll();
-      console.log("Cart response:", response); 
-  
-      const items = response.data && Array.isArray(response.data) 
-        ? response.data 
-        : (Array.isArray(response) ? response : []);
+      // Use getCart with userId instead of getAll
+      const items = await getCart(userId);
+      console.log("Cart items:", items);
       
-      setCartItems(items);
-      calculateTotal(items);
+      if (items && Array.isArray(items)) {
+        setCartItems(items);
+        calculateTotal(items);
+      } else {
+        console.warn("Unexpected cart data format:", items);
+        setCartItems([]);
+        setTotalPrice(0);
+      }
       setError(null);
     } catch (err) {
       console.error("Fel vid hämtning av varukorg:", err);
       setError("Kunde inte hämta varukorgen. Försök igen senare.");
+      setCartItems([]);
+      setTotalPrice(0);
     } finally {
       setLoading(false);
     }
   };
-  
 
   useEffect(() => {
     loadCart();
@@ -155,7 +162,16 @@ function CartView() {
     }));
   };
 
-   // Visa felmeddelande
+  // Show loading indicator
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  // Visa felmeddelande
   if (error) {
     return (
       <Paper sx={{ p: 2, bgcolor: 'error.light', color: 'error.contrastText' }}>
@@ -177,7 +193,6 @@ function CartView() {
       <Box sx={{ p: 2, textAlign: 'center' }}>
         <ShoppingCartIcon sx={{ fontSize: 60, color: 'text.secondary', mb: 2 }} />
         <Typography variant="body1" gutterBottom>Din varukorg är tom</Typography>
-        
       </Box>
     );
   }
