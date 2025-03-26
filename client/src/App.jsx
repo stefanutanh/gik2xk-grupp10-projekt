@@ -8,39 +8,28 @@ import {
   Container,
   IconButton,
   Badge,
-  Drawer,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  useMediaQuery,
-  useTheme,
   Popover
 } from '@mui/material';
 import { useState, useEffect } from 'react';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import HomeIcon from '@mui/icons-material/Home';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import MenuIcon from '@mui/icons-material/Menu';
 import CartView from './components/CartView';
 import { getAll } from './services/CartService';
 
 function App() {
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [cartAnchorEl, setCartAnchorEl] = useState(null);
   const [cartItemCount, setCartItemCount] = useState(0);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const navigate = useNavigate();
 
-  // Ladda antal varor i varukorgen
+  // Load cart items count
   useEffect(() => {
     loadCartCount();
     
-    // Lägg till en timer för att uppdatera varukorgen med jämna mellanrum
-    const intervalId = setInterval(loadCartCount, 30000); // Var 30:e sekund
+    // Set timer to periodically update cart
+    const intervalId = setInterval(loadCartCount, 60000); // Once every minute
     
-    return () => clearInterval(intervalId); // Rensa timern när komponenten avmonteras
+    return () => clearInterval(intervalId); // Clean up timer when component unmounts
   }, []);
 
   const loadCartCount = async () => {
@@ -50,27 +39,13 @@ function App() {
         setCartItemCount(items.length);
       }
     } catch (err) {
-      console.error("Fel vid hämtning av varukorg:", err);
+      console.error("Error fetching cart:", err);
     }
-  };
-
-  useEffect(() => {
-    // Försök ladda varukorgen direkt
-    loadCartCount();
-    
-    // Skapa en timer med längre intervall för att minska belastningen
-    const intervalId = setInterval(loadCartCount, 60000); // En gång i minuten istället för 30 sekunder
-    
-    return () => clearInterval(intervalId); // Rensa timern när komponenten avmonteras
-  }, []);
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
   };
 
   const handleCartClick = (event) => {
     setCartAnchorEl(event.currentTarget);
-    loadCartCount(); // Uppdatera räknaren när varukorgen öppnas
+    loadCartCount(); // Update counter when cart is opened
   };
 
   const handleCartClose = () => {
@@ -90,40 +65,6 @@ function App() {
     { text: 'Skapa produkt', icon: <AddCircleIcon />, path: '/products/new' },
   ];
 
-  const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Drawer
-        variant="temporary"
-        open={mobileOpen}
-        onClose={handleDrawerToggle}
-        ModalProps={{
-          keepMounted: true, // Better mobile performance
-        }}
-        sx={{
-          display: { xs: 'block', sm: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
-        }}
-      >
-        <List>
-          {navItems.map((item) => (
-            <ListItem button key={item.text} component={Link} to={item.path}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-          <ListItem button onClick={handleCartClick}>
-            <ListItemIcon>
-              <Badge badgeContent={cartItemCount} color="error">
-                <ShoppingCartIcon />
-              </Badge>
-            </ListItemIcon>
-            <ListItemText primary="Varukorg" />
-          </ListItem>
-        </List>
-      </Drawer>
-    </Box>
-  );
-
   return (
     <>
       <Box component="header" sx={{ flexGrow: 1 }}>
@@ -135,26 +76,13 @@ function App() {
           }}
         >
           <Toolbar sx={{ justifyContent: 'space-between' }}>
-            {/* Mobile menu button */}
-            {isMobile && (
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                edge="start"
-                onClick={handleDrawerToggle}
-                sx={{ mr: 2, display: { md: 'none' } }}
-              >
-                <MenuIcon />
-              </IconButton>
-            )}
-
             {/* Logo */}
             <Typography 
               variant="h1" 
               component="div" 
               sx={{ 
-                flexGrow: isMobile ? 0 : 1,
-                fontSize: isMobile ? '2rem' : '3rem',
+                flexGrow: 1,
+                fontSize: '3rem',
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
               }}
             >
@@ -163,8 +91,8 @@ function App() {
               </Link>
             </Typography>
 
-            {/* Desktop Navigation */}
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
+            {/* Navigation */}
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
               {navItems.map((item) => (
                 <Button 
                   key={item.text} 
@@ -207,7 +135,6 @@ function App() {
             </IconButton>
           </Toolbar>
         </AppBar>
-        {drawer}
       </Box>
       
       {/* Cart Popover */}
