@@ -1,6 +1,5 @@
 import ProductItemLarge from '../components/ProductItemLarge';
 import axios from '../services/api';
-
 import { Alert, Box, Button, Container, Paper, Typography, Snackbar, Divider } from '@mui/material';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -11,12 +10,12 @@ import Rating from '@mui/material/Rating';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { addToCart } from '../services/CartService';
 
-
 // Komponent för betyg och betygsättning
 function ProductRating({ productId, onRatingSuccess }) {
   const [value, setValue] = useState(0);
   const [averageRating, setAverageRating] = useState(0);
   const [ratingCount, setRatingCount] = useState(0);
+  const [ratings, setRatings] = useState([]); // Ny state-variabel för att lagra alla betyg
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -28,6 +27,7 @@ function ProductRating({ productId, onRatingSuccess }) {
         if (response.data) {
           setAverageRating(response.data.averageRating || 0);
           setRatingCount(response.data.count || 0);
+          setRatings(response.data.ratings || []); // Uppdatera betygslistan
         }
       } catch (err) {
         console.error("Fel vid hämtning av betyg:", err);
@@ -54,7 +54,8 @@ function ProductRating({ productId, onRatingSuccess }) {
         if (response.data && response.data.data) {
           // Uppdatera genomsnittsbetyg och räknare
           setAverageRating(response.data.data.averageRating || 0);
-  setRatingCount(response.data.data.count || 0);
+          setRatingCount(response.data.data.count || 0);
+          setRatings(prevRatings => [...prevRatings, { rating: newValue }]); // Uppdatera betygslistan
           setError(null);
           if (onRatingSuccess) {
             onRatingSuccess("Tack för ditt betyg!");
@@ -71,6 +72,8 @@ function ProductRating({ productId, onRatingSuccess }) {
       }
     }
   };
+
+
 
   return (
     <Paper elevation={2} sx={{ p: 3, mt: 3, mb: 3 }}>
@@ -103,6 +106,15 @@ function ProductRating({ productId, onRatingSuccess }) {
           {error}
         </Typography>
       )}
+  
+      <Divider sx={{ my: 2 }} />
+  
+      <Typography variant="h6" gutterBottom>Alla betyg</Typography>
+      <ul>
+        {ratings.map((rating, index) => (
+          <li key={index}>{rating.rating}</li>
+        ))}
+      </ul>
     </Paper>
   );
 }

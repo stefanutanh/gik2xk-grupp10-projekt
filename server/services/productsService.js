@@ -21,7 +21,13 @@ async function getById(id) {
   try {
     const product = await db.product.findOne({
       where: { id },
-      include: [db.user]
+      include: [
+        {
+          model: db.rating, // Include ratings
+          as: 'ratings', // Make sure this matches your model association
+          include: [db.user] // Optionally include user who gave the rating
+        }
+      ]
     });
 
     if (!product) {
