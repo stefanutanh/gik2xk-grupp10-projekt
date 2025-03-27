@@ -172,6 +172,13 @@ function ProductDetail() {
       });
   }, [id]);
 
+  //Lägger till innehållet på sidan
+  useEffect(() => {
+    if (location.state) {
+      setProduct(location.state);
+    }
+  }, [location.state]);
+
   if (loading) {
     return (
       <Container maxWidth="lg">
@@ -274,5 +281,6 @@ function ProductDetail() {
     </Container>
   );
 }
+
 
 export default ProductDetail;
