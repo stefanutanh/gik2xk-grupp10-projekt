@@ -59,7 +59,7 @@ function Home() {
                 textShadow: '1px 1px 3px rgba(0,0,0,0.3)'
               }}
             >
-              Våra produkter
+              Här har vi random produkter!
             </Typography>
             <Typography 
               variant="subtitle1" 

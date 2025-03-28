@@ -238,7 +238,6 @@ function ProductDetail() {
         <Box display="flex" justifyContent="space-between" mb={4}>
           <Button
             variant="contained"
-            color="secondary"
             startIcon={<ChevronLeftIcon />}
             sx={{ mr: 2 }}
             onClick={() => navigate(-1)}

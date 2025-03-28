@@ -87,7 +87,7 @@ function App() {
               }}
             >
               <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                Grupp 10's webbshopp
+                RANDOM AB
               </Link>
             </Typography>
 

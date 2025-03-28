@@ -20,6 +20,8 @@ import {
   teal
 } from '@mui/material/colors';
 
+
+
 const theme = createTheme({
   palette: {
     mode: 'light',
@@ -28,10 +30,10 @@ const theme = createTheme({
       paper: grey[50]
     },
     primary: {
-      main: blueGrey[500]
+      main: green[700]
     },
     secondary: {
-      main: blueGrey[500]
+      main: green[600]
     },
     success: {
       main: teal['700']
@@ -43,10 +45,11 @@ const theme = createTheme({
   typography: {
     fontFamily: '"Ubuntu", "Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
-      fontFamily: 'Satisfy',
+      fontFamily: 'Lilita One',
       fontSize: '3.7rem'
     },
     h2: {
+      fontFamily: 'Lilita One',
       fontSize: '2.1rem',
       marginBottom: '.7em',
       color: blueGrey[800]
@@ -58,8 +61,10 @@ const theme = createTheme({
       fontSize: '1.3rem',
       color: 'rgb(106, 77, 123)'
     },
-    body1: { color: blueGrey[700] },
-    body2: { color: blueGrey[800] }
+    body1: { color: blueGrey[700],
+      fontFamily: 'Lilita One'
+     },
+    body2: { color: blueGrey[1] }
   }
 });
 
@@ -95,5 +100,10 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-	<React.StrictMode>{<RouterProvider router={router} />}</React.StrictMode>
+  <React.StrictMode>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <RouterProvider router={router} />
+    </ThemeProvider>
+  </React.StrictMode>
 );
