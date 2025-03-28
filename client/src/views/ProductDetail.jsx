@@ -110,11 +110,15 @@ function ProductRating({ productId, onRatingSuccess }) {
       <Divider sx={{ my: 2 }} />
   
       <Typography variant="h6" gutterBottom>Alla betyg</Typography>
+
       <ul>
-        {ratings.map((rating, index) => (
-          <li key={index}>{rating.rating}</li>
-        ))}
+       {ratings.map((rating, index) => (
+      <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+      <Rating value={rating.rating} readOnly size="small" />
+      </Box>
+    ))}
       </ul>
+      
     </Paper>
   );
 }
