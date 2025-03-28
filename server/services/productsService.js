@@ -96,11 +96,16 @@ async function destroy(id) {
     return createResponseError(422, 'Id är obligatoriskt');
   }
   try {
+
+    await db.rating.destroy({
+      where: { productId: id }
+    });
     await db.product.destroy({
       where: { id }
-    });
+    });    
     return createResponseMessage(200, 'Produkten raderades.');
   } catch (error) {
+    console.error('Error deleting product:', error);
     return createResponseError(500, error.message);
   }
 }

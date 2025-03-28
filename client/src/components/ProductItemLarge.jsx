@@ -22,7 +22,16 @@ function ProductItemLarge({ product }) {
         </Typography>
       </Box>
       <Card elevation={0}>
-        <CardMedia component="img" image={product.imageUrl || placeholderImage} />
+        <CardMedia 
+          component="img" 
+          image={product.imageUrl || placeholderImage} 
+          sx={{ 
+            maxHeight: '400px',
+            objectFit: 'contain',
+            width: '100%',
+            mt: 2
+          }}
+        />
       
       </Card>
     </Paper>

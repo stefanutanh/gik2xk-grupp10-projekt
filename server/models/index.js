@@ -65,7 +65,7 @@ db.cart.belongsTo(db.user, { foreignKey: 'userId' });
 // Rating associationer
 // Rating - Produkt
 db.rating.belongsTo(db.product, { foreignKey: 'productId' });
-db.product.hasMany(db.rating, { foreignKey: 'productId' });
+db.product.hasMany(db.rating, { foreignKey: 'productId', onDelete: 'CASCADE' });
 
 // Rating - Användare
 db.rating.belongsTo(db.user, { foreignKey: 'userId' });
