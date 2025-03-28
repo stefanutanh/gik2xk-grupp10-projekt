@@ -22,14 +22,14 @@ function App() {
   const [cartItemCount, setCartItemCount] = useState(0);
   const navigate = useNavigate();
 
-  // Load cart items count
+  
   useEffect(() => {
     loadCartCount();
     
-    // Set timer to periodically update cart
-    const intervalId = setInterval(loadCartCount, 60000); // Once every minute
     
-    return () => clearInterval(intervalId); // Clean up timer when component unmounts
+    const intervalId = setInterval(loadCartCount, 60000); 
+    
+    return () => clearInterval(intervalId); 
   }, []);
 
   const loadCartCount = async () => {
@@ -45,7 +45,7 @@ function App() {
 
   const handleCartClick = (event) => {
     setCartAnchorEl(event.currentTarget);
-    loadCartCount(); // Update counter when cart is opened
+    loadCartCount(); 
   };
 
   const handleCartClose = () => {
@@ -116,7 +116,7 @@ function App() {
             </Box>
 
             {/* Shopping Cart Icon */}
-            <IconButton 
+            {/* <IconButton 
               color="inherit" 
               aria-label="shopping cart"
               aria-describedby={cartId}
@@ -132,7 +132,7 @@ function App() {
               <Badge badgeContent={cartItemCount} color="error">
                 <ShoppingCartIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
           </Toolbar>
         </AppBar>
       </Box>
