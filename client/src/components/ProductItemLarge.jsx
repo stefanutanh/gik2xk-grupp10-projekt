@@ -24,7 +24,7 @@ function ProductItemLarge({ product }) {
       <Card elevation={0}>
         <CardMedia 
           component="img" 
-          image={product.imageUrl || placeholderImage} 
+          image={product.imageUrl.startsWith('http') ? product.imageUrl : `/${product.imageUrl}` || placeholderImage}
           sx={{ 
             maxHeight: '400px',
             objectFit: 'contain',
